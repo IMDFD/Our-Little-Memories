@@ -1,0 +1,1751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>🌸 Our Little Memories</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Dancing+Script:wght@600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blush:#f6dde3;
+  --blush-2:#f1c9d2;
+  --rose:#e2a3b1;
+  --rose-deep:#c97b8c;
+  --rose-darker:#a85a6c;
+  --burgundy:#5e2236;
+  --burgundy-2:#4a1a2a;
+  --cream:#fdf6ec;
+  --cream-2:#f7ecd9;
+  --kraft:#e6d8bd;
+  --gold:#c9a268;
+  --ink:#5a3744;
+  --ink-soft:#8a6470;
+  --wood:#5b3a2a;
+  --shadow: rgba(90,40,55,.35);
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color: transparent; user-select:none;}
+html,body{margin:0;padding:0;height:100%;overflow:hidden;font-family:'Poppins',sans-serif;background:var(--wood);}
+body{
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(255,255,255,.06), transparent 60%),
+    repeating-linear-gradient(100deg, #6b4530 0px, #5b3a2a 3px, #543322 6px),
+    linear-gradient(160deg,#6b4530,#3f2718);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+#app{
+  width:100%;
+  max-width:430px;
+  height:100vh;
+  height:100dvh;
+  position:relative;
+  overflow:hidden;
+  background:transparent;
+}
+@keyframes shakeX{ 0%,100%{transform:translateX(0);} 25%{transform:translateX(-8px);} 75%{transform:translateX(8px);} }
+.screen{
+  position:absolute; inset:0;
+  display:none;
+  flex-direction:column;
+}
+.screen.active{display:flex;}
+img,input,textarea{user-select:auto;}
+button{font-family:inherit; border:none; background:none; cursor:pointer;}
+input,textarea{font-family:inherit;}
+
+/* ---------- decorative bits ---------- */
+.heart-deco{position:absolute; font-size:14px; color:var(--rose-deep); opacity:.55; pointer-events:none;}
+.lace-corner{
+  position:absolute; width:70px; height:70px; pointer-events:none; opacity:.5;
+  background: radial-gradient(circle at 0 0, transparent 6px, #fff 6px) ;
+  mask: repeating-conic-gradient(#000 0deg 18deg, transparent 18deg 36deg);
+}
+
+/* ================= COVER ================= */
+#screen-cover{
+  background: linear-gradient(160deg,#4a2c1f,#6b4530);
+  align-items:center; justify-content:space-between;
+  padding:calc(22px + env(safe-area-inset-top)) 22px calc(16px + env(safe-area-inset-bottom));
+}
+.cover-topbar{width:100%; display:flex; justify-content:space-between; align-items:center; color:#f5e6da; opacity:.85;}
+.cover-topbar .menu-ico{font-size:20px;}
+.lock-badge{
+  width:34px;height:34px;border-radius:50%;background:var(--rose-deep);
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;
+  box-shadow:0 3px 8px rgba(0,0,0,.35);
+}
+.cover-book{
+  position:relative;
+  width:84%;
+  aspect-ratio: 3/4.6;
+  border-radius:10px;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(255,255,255,.18), transparent 40%),
+    linear-gradient(135deg,#f3c4d0,#e2a3b1 40%, #c97b8c 100%);
+  box-shadow: 0 18px 40px var(--shadow), inset 0 0 0 2px rgba(255,255,255,.35), inset 0 0 30px rgba(255,255,255,.25);
+  border:3px solid rgba(255,255,255,.55);
+  display:flex; align-items:center; justify-content:center; flex-direction:column;
+  padding:20px;
+  margin-top: -8px;
+}
+.cover-book::before{
+  content:"";
+  position:absolute; inset:8px;
+  border:1.5px solid rgba(255,255,255,.6);
+  border-radius:6px;
+  pointer-events:none;
+}
+.cover-title{
+  font-family:'Dancing Script', cursive;
+  font-weight:700;
+  font-size:34px;
+  color:#7a3245;
+  text-align:center;
+  line-height:1.05;
+  text-shadow:0 1px 0 rgba(255,255,255,.5);
+}
+.cover-title small{display:block; font-size:18px; font-weight:600;}
+.cover-ribbon{
+  position:absolute; bottom:-14px; left:50%; transform:translateX(-50%);
+  width:64px;height:46px;
+  background: linear-gradient(160deg,#f6c9d6,#dd8aa0);
+  clip-path: polygon(50% 0%, 100% 20%, 78% 50%, 100% 80%, 50% 100%, 0 80%, 22% 50%, 0 20%);
+  box-shadow:0 4px 10px rgba(0,0,0,.25);
+}
+.cover-open-btn{
+  margin-top:26px;
+  background: linear-gradient(160deg,#f1aebb,#d9778c);
+  color:#fff; font-weight:600; font-size:15px;
+  padding:12px 30px; border-radius:30px;
+  box-shadow:0 8px 18px rgba(0,0,0,.3);
+  display:flex; align-items:center; gap:8px;
+}
+.cover-bottomnav{
+  width:100%; display:flex; justify-content:space-around; align-items:center;
+  background:rgba(255,255,255,.12); border-radius:30px; padding:10px 14px; margin-top:18px;
+  backdrop-filter: blur(4px);
+}
+.nav-btn{
+  width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  color:#fff; font-size:17px; background:rgba(255,255,255,.08);
+}
+.nav-btn.primary{background: linear-gradient(160deg,#f1aebb,#d9778c); width:48px;height:48px; box-shadow:0 6px 14px rgba(0,0,0,.3);}
+
+/* ================= BOOK ================= */
+#screen-book{ background: linear-gradient(170deg,#4a2c1f,#6b4530); }
+.book-topbar{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:calc(10px + env(safe-area-inset-top)) 16px 8px; color:#f5e6da;
+}
+.book-topbar .ico-btn{font-size:19px; padding:6px; opacity:.9;}
+.book-topbar .title-mini{font-family:'Dancing Script',cursive; font-size:20px; font-weight:700;}
+.book-stage{
+  flex:1; position:relative; perspective:1600px; margin:0 14px 6px;
+}
+.book-stage::after{
+  content:"";
+  position:absolute; right:-3px; top:3%; bottom:3%; width:6px;
+  background: repeating-linear-gradient(to bottom, #f6ead4 0px, #f6ead4 2px, #d9c7a4 2px, #d9c7a4 3px);
+  border-radius:0 5px 5px 0;
+  box-shadow:1px 0 3px rgba(0,0,0,.3);
+  z-index:2; pointer-events:none;
+}
+.page-rings{ position:absolute; left:2px; top:0; bottom:0; width:20px; z-index:8; pointer-events:none; }
+.page-ring{
+  position:absolute; left:0; width:17px; height:17px; border-radius:50%;
+  border:3px solid #c9a268; box-shadow:0 1px 2px rgba(0,0,0,.4), inset 0 1px 1px rgba(255,255,255,.55);
+  background:transparent;
+}
+.flip-shade{
+  position:absolute; inset:0; pointer-events:none; z-index:7; opacity:0;
+  background: linear-gradient(100deg, rgba(20,5,10,0) 35%, rgba(20,5,10,.4) 100%);
+}
+.page-empty{
+  position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  background: linear-gradient(160deg,#fdf6ec,#f3e4cf);
+  border-radius:10px; box-shadow:0 18px 30px var(--shadow);
+  text-align:center; padding:30px; color:var(--ink-soft); gap:10px;
+}
+.page-empty .big-emoji{font-size:46px;}
+.page-empty h3{font-family:'Dancing Script',cursive; color:var(--rose-darker); font-size:24px; margin:0;}
+.page-empty p{font-size:13px; margin:0; line-height:1.5;}
+
+.page-card{
+  position:absolute; inset:0;
+  border-radius:8px;
+  box-shadow:0 18px 34px var(--shadow);
+  overflow:hidden;
+  transform-style: preserve-3d;
+  backface-visibility:hidden;
+  transform-origin: left center;
+  will-change: transform;
+}
+.page-card::after{
+  content:""; position:absolute; left:0; top:0; bottom:0; width:10%;
+  background: linear-gradient(to right, rgba(40,15,20,.22), transparent);
+  pointer-events:none; z-index:6;
+}
+.page-card::before{
+  content:""; position:absolute; right:0; bottom:0; width:0; height:0;
+  border-style:solid; border-width:0 0 24px 24px;
+  border-color:transparent transparent rgba(170,130,100,.4) transparent;
+  z-index:9; pointer-events:none;
+}
+.page-card.flip-origin-left{transform-origin:left center;}
+.page-card.flip-origin-right{transform-origin:right center;}
+.page-surface{
+  position:absolute; inset:0; padding:16px;
+  display:flex; flex-direction:column;
+  overflow:hidden;
+}
+.bg-cream{ background: linear-gradient(170deg,#fdf6ec,#f5e7d2); }
+.bg-blush{ background: linear-gradient(170deg,#fdeef1,#f6d6dd); }
+.bg-burgundy{ background: linear-gradient(170deg,#5e2236,#46172a); color:#fdf2f0; }
+.bg-kraft{ background: linear-gradient(170deg,#e9dcc0,#d9c79f); }
+.page-surface::after{
+  content:""; position:absolute; inset:0; pointer-events:none; opacity:.5;
+  background-image: radial-gradient(rgba(120,80,70,.05) 1px, transparent 1.4px);
+  background-size:6px 6px;
+}
+.page-title-tag{
+  align-self:flex-start;
+  background:var(--rose); color:#fff; font-family:'Dancing Script',cursive; font-weight:700;
+  font-size:18px; padding:6px 16px; border-radius:14px 14px 14px 0;
+  box-shadow:0 3px 8px rgba(0,0,0,.15);
+  max-width:90%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.page-date-tag{
+  position:absolute; bottom:10px; right:14px; font-size:10px; opacity:.55; font-family:'Poppins'; letter-spacing:.5px;
+}
+.page-frame-overlay{ position:absolute; inset:8px; border-radius:6px; pointer-events:none; z-index:4; }
+.pf-corner{ position:absolute; font-size:15px; line-height:1; }
+.pf-corner.tl{ top:-9px; left:-9px; } .pf-corner.tr{ top:-9px; right:-9px; }
+.pf-corner.bl{ bottom:-9px; left:-9px; } .pf-corner.br{ bottom:-9px; right:-9px; }
+.page-elements-layer{ position:relative; flex:1; margin-top:10px; }
+.canvas-el{
+  position:absolute; touch-action:none; container-type:size;
+}
+.canvas-el img{width:100%;height:100%;display:block; object-fit:cover; border-radius:3px;}
+.el-text{
+  font-family:'Caveat',cursive; font-size:22px; color:var(--ink); white-space:pre-wrap;
+  padding:2px 4px; line-height:1.2;
+}
+.el-sticker{font-size:65cqmin; line-height:1; display:flex; align-items:center; justify-content:center; width:100%; height:100%;}
+.el-polaroid{ background:#fff; padding:6px 6px 22px 6px; box-shadow:0 6px 14px rgba(0,0,0,.25); }
+.el-polaroid img, .el-polaroid video{ width:100%; height:calc(100% - 0px); object-fit:cover; }
+.el-photocard{
+  width:100%; height:100%; background:#fffdfa; padding:6%;
+  box-shadow:0 6px 14px rgba(60,30,40,.32), 0 1px 0 rgba(255,255,255,.6) inset;
+  border-radius:4px; position:relative;
+}
+.el-photocard img, .el-photocard video{ width:100%; height:100%; border-radius:2px; display:block; object-fit:cover; }
+.el-photocard-round{ border-radius:50%; }
+.el-photocard-round img, .el-photocard-round video{ border-radius:50%; }
+.el-photocard-dashed{ border:3px dashed var(--gold); background:#fff; }
+.el-photocard-scallop{ border:5px double var(--gold); background:#fffaf2; }
+.el-photocard-torn{
+  padding:5%; background:#fffaf3;
+  clip-path: polygon(2% 4%,12% 0%,24% 3%,36% 0%,48% 4%,60% 0%,74% 3%,86% 0%,98% 4%,100% 14%,97% 26%,100% 38%,96% 50%,100% 64%,97% 78%,100% 90%,96% 100%,84% 97%,72% 100%,60% 97%,48% 100%,36% 97%,24% 100%,12% 97%,0% 100%,3% 86%,0% 74%,4% 60%,0% 48%,3% 36%,0% 24%,4% 12%,0% 2%);
+}
+.el-photocard-heart{
+  padding:4%; background:#fffaf3;
+  clip-path: polygon(50% 18%,61% 6%,75% 0%,88% 4%,97% 15%,99% 28%,93% 44%,80% 60%,50% 90%,20% 60%,7% 44%,1% 28%,3% 15%,12% 4%,25% 0%,39% 6%);
+}
+.el-photocard-hexagon{
+  padding:5%; background:#fffaf3;
+  clip-path: polygon(25% 2%,75% 2%,100% 50%,75% 98%,25% 98%,0% 50%);
+}
+.el-photocard-octagon{
+  padding:5%; background:#fffaf3;
+  clip-path: polygon(30% 0%,70% 0%,100% 30%,100% 70%,70% 100%,30% 100%,0% 70%,0% 30%);
+}
+.el-photocard-diamond{
+  padding:6%; background:#fffaf3;
+  clip-path: polygon(50% 0%,100% 50%,50% 100%,0% 50%);
+}
+.el-photocard-star{
+  padding:6%; background:#fffaf3;
+  clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+}
+.el-photocard-arch{
+  padding:5%; background:#fffaf3;
+  border-radius:50% 50% 6px 6px / 65% 65% 6px 6px;
+}
+.el-photocard-arch img, .el-photocard-arch video{ border-radius:50% 50% 4px 4px / 65% 65% 4px 4px; }
+.el-tape{ background: repeating-linear-gradient(45deg, rgba(255,255,255,.0) 0 6px, rgba(255,255,255,.18) 6px 12px); opacity:.85; border-radius:2px; }
+.el-cassette{
+  width:100%; height:100%; border-radius:10cqmin; position:relative;
+  background: linear-gradient(160deg,#f6c3d3,#e487a3);
+  box-shadow:0 4px 10px rgba(0,0,0,.25), inset 0 0 0 2px rgba(255,255,255,.4);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6cqh; padding:6% 8%;
+}
+.el-cassette .reels{ display:flex; gap:14cqmin; }
+.el-cassette .reel{ width:20cqmin; height:20cqmin; border-radius:50%; background:#fff8f0; border:3cqmin solid #b9587a; }
+.el-cassette .label{
+  background:#fff8f0; border-radius:4cqmin; padding:3% 8%; font-size:13cqmin; color:#a85a6c;
+  max-width:92%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+
+.book-nav-arrows{ display:flex; align-items:center; justify-content:center; gap:18px; padding:6px 0 4px; }
+.arrow-btn{
+  width:38px;height:38px;border-radius:50%; background:rgba(255,255,255,.15); color:#fff; font-size:16px;
+  display:flex; align-items:center; justify-content:center;
+}
+.page-counter{ color:#f5e6da; font-size:13px; min-width:56px; text-align:center; letter-spacing:.5px;}
+
+.book-bottomnav{
+  display:flex; justify-content:space-around; align-items:center;
+  padding:10px 16px calc(14px + env(safe-area-inset-bottom));
+}
+
+/* ================= EDITOR ================= */
+#screen-editor{ background: linear-gradient(170deg,#4a2c1f,#6b4530); }
+.editor-topbar{
+  display:flex; align-items:center; justify-content:space-between; padding:calc(10px + env(safe-area-inset-top)) 14px 10px;
+}
+.editor-topbar .ico-btn{ color:#f5e6da; font-size:20px; }
+.editor-save-btn{
+  background: linear-gradient(160deg,#f1aebb,#d9778c); color:#fff; font-weight:600; font-size:13px;
+  padding:8px 18px; border-radius:20px; box-shadow:0 4px 10px rgba(0,0,0,.25);
+}
+.editor-meta{ display:flex; gap:8px; padding:0 14px 10px; }
+.editor-meta input{
+  background:rgba(255,255,255,.85); border-radius:10px; padding:8px 12px; font-size:13px; border:none; color:var(--ink);
+}
+.editor-meta .meta-title{flex:1.4; font-family:'Dancing Script',cursive; font-size:15px; font-weight:700;}
+.editor-meta .meta-date{flex:1;}
+.editor-canvas-wrap{ flex:1; position:relative; margin:0 14px 8px; }
+.editor-canvas{
+  position:absolute; inset:0; border-radius:8px; overflow:hidden;
+  box-shadow:0 14px 26px var(--shadow);
+}
+.editor-toolbar{
+  display:flex; overflow-x:auto; gap:10px; padding:10px 14px 8px; -webkit-overflow-scrolling:touch;
+}
+.tool-btn{
+  flex:0 0 auto; display:flex; flex-direction:column; align-items:center; gap:4px;
+  color:#f5e6da; font-size:10px; opacity:.92;
+}
+.tool-btn .tool-ico{
+  width:42px;height:42px;border-radius:50%; background:rgba(255,255,255,.14);
+  display:flex; align-items:center; justify-content:center; font-size:18px;
+}
+.tool-btn.active .tool-ico{ background: linear-gradient(160deg,#f1aebb,#d9778c); }
+
+.subpanel{
+  position:absolute; left:0; right:0; bottom:0; background:#fff8f0; border-radius:18px 18px 0 0;
+  box-shadow:0 -10px 26px rgba(0,0,0,.35); padding:14px 14px calc(14px + env(safe-area-inset-bottom)); max-height:46%; overflow-y:auto;
+  transform:translateY(110%); transition:transform .28s ease; z-index:50;
+}
+.subpanel.open{ transform:translateY(0); }
+.subpanel h4{ margin:0; font-family:'Dancing Script',cursive; color:var(--rose-darker); font-size:17px; }
+.subpanel-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.subpanel-close{
+  width:26px;height:26px;border-radius:50%; background:#f3e3e8; color:var(--rose-darker); font-size:13px;
+  display:flex; align-items:center; justify-content:center; flex:0 0 auto;
+}
+.swatch-row{ display:flex; gap:10px; flex-wrap:wrap; }
+.swatch{ width:34px; height:34px; border-radius:50%; box-shadow:inset 0 0 0 2px rgba(0,0,0,.08); }
+.bg-pick{ width:54px; height:70px; border-radius:6px; box-shadow:0 2px 6px rgba(0,0,0,.2); display:flex; align-items:flex-end; justify-content:center; font-size:9px; color:#fff; padding-bottom:4px; }
+.sticker-grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:6px; }
+.sticker-grid button{ font-size:24px; padding:6px 0; }
+.font-row{ display:flex; gap:10px; overflow-x:auto; padding-bottom:4px;}
+.font-opt{ padding:8px 14px; border-radius:10px; background:#f3e3e8; font-size:15px; white-space:nowrap; }
+.tape-grid{ display:flex; gap:10px; }
+.tape-opt{ width:46px; height:20px; border-radius:2px; box-shadow:0 2px 5px rgba(0,0,0,.2); }
+.frame-grid{ display:flex; gap:10px; flex-wrap:wrap;}
+.frame-opt{ width:50px; height:60px; border:3px solid var(--gold); border-radius:4px; }
+
+.sel-toolbar{
+  position:absolute; display:flex; gap:6px; transform:translate(-50%,-130%); z-index:30;
+}
+.sel-mini-btn{
+  width:26px;height:26px;border-radius:50%; background:#fff; color:var(--rose-darker); font-size:12px;
+  display:flex; align-items:center; justify-content:center; box-shadow:0 3px 6px rgba(0,0,0,.3);
+}
+.resize-handle{
+  position:absolute; right:-12px; bottom:-12px; width:26px;height:26px; border-radius:50%;
+  background:var(--rose-deep); border:2px solid #fff; box-shadow:0 2px 5px rgba(0,0,0,.3); z-index:25;
+}
+.selected-el{ outline:2px dashed var(--rose-deep); outline-offset:2px; }
+
+/* ================= LIVE DRAW (directly over the page) ================= */
+#liveDrawCanvas{
+  position:absolute; inset:0; touch-action:none; background:transparent; border-radius:8px; z-index:20; display:none;
+}
+.draw-toolbar{ display:flex; align-items:center; justify-content:space-between; padding:10px 14px calc(14px + env(safe-area-inset-bottom)); gap:8px; }
+.draw-colors{ display:flex; gap:6px; }
+.draw-colors .swatch{ width:24px;height:24px; }
+.draw-tools{ display:flex; gap:6px; }
+.draw-tools button{ width:34px;height:34px; border-radius:50%; background:rgba(255,255,255,.14); color:#fff; font-size:14px; }
+.draw-tools button.active{ background:var(--rose-deep); }
+.draw-size{ width:54px; }
+
+/* ================= SEARCH ================= */
+#screen-search{ background:rgba(40,22,16,.92); justify-content:flex-start; }
+.search-bar-wrap{ padding:calc(14px + env(safe-area-inset-top)) 16px 10px; display:flex; gap:8px; align-items:center;}
+.search-input{
+  flex:1; background:rgba(255,255,255,.9); border-radius:24px; padding:11px 16px; font-size:14px; color:var(--ink); border:none;
+}
+.search-results{ padding:6px 16px; overflow-y:auto; flex:1;}
+.search-result-item{
+  display:flex; align-items:center; gap:10px; background:rgba(255,255,255,.92); border-radius:12px; padding:10px; margin-bottom:10px;
+}
+.sri-thumb{ width:44px;height:54px; border-radius:4px; flex:0 0 auto; display:flex;align-items:center;justify-content:center; font-size:18px; color:#fff;}
+.sri-text{ flex:1; }
+.sri-title{ font-family:'Dancing Script',cursive; font-size:16px; color:var(--rose-darker); font-weight:700; }
+.sri-date{ font-size:11px; color:var(--ink-soft); }
+.search-empty{ color:#f5e6da; text-align:center; padding:30px 16px; font-size:13px; opacity:.8;}
+
+/* ================= PUZZLE OVERLAY ================= */
+.puzzle-overlay{
+  position:absolute; inset:0; z-index:300; background:rgba(30,16,10,.78);
+  display:none; align-items:center; justify-content:center; padding:18px;
+}
+.puzzle-overlay.open{ display:flex; }
+.puzzle-sheet{
+  width:100%; max-width:380px; background:#fff8f0; border-radius:18px; padding:16px;
+  box-shadow:0 16px 36px rgba(0,0,0,.4);
+}
+.puzzle-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.puzzle-title{ font-family:'Dancing Script',cursive; font-size:19px; color:var(--rose-darker); }
+.puzzle-board-wrap{ position:relative; }
+.puzzle-board{
+  position:relative; width:100%; aspect-ratio:1; background:#eaddc4; border-radius:8px; overflow:hidden;
+  box-shadow:inset 0 0 0 2px rgba(0,0,0,.08);
+}
+.puzzle-piece{
+  position:absolute; background-size:cover; background-position:center; touch-action:none;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.18); transition:left .18s ease, top .18s ease;
+}
+.puzzle-piece.dragging{ z-index:50; transition:none; box-shadow:0 8px 16px rgba(0,0,0,.4); }
+.puzzle-solved-banner{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  background:rgba(255,255,255,.55); font-family:'Dancing Script',cursive; font-size:26px; color:var(--rose-darker);
+  border-radius:8px; pointer-events:none;
+}
+.puzzle-actions{ display:flex; gap:10px; margin-top:14px; }
+.puzzle-actions .editor-save-btn{ flex:1; text-align:center; }
+.el-puzzle{
+  width:100%; height:100%; border-radius:6px; background: linear-gradient(160deg,#f3e3e8,#e8c9d2);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+  font-size:26cqmin; box-shadow:0 4px 10px rgba(0,0,0,.2); cursor:pointer;
+}
+.el-puzzle .puzzle-label{ font-size:11cqmin; color:var(--rose-darker); font-family:'Poppins'; text-align:center; padding:0 8%; }
+.el-puzzle.solved{ background: linear-gradient(160deg,#e3f0d8,#c9e0b8); }
+
+/* ================= SETTINGS ================= */
+#screen-settings{ background: linear-gradient(170deg,#4a2c1f,#6b4530); }
+.settings-card{
+  margin:16px; background:#fff8f0; border-radius:14px; padding:16px; box-shadow:0 8px 20px rgba(0,0,0,.25);
+}
+.settings-card h4{ font-family:'Dancing Script',cursive; color:var(--rose-darker); margin:0 0 8px;}
+.settings-card p{ font-size:12.5px; color:var(--ink-soft); line-height:1.5; margin:0 0 10px;}
+.danger-btn{ background:#c9536a; color:#fff; padding:9px 16px; border-radius:20px; font-size:13px; font-weight:600;}
+
+/* toast */
+#toast{
+  position:absolute; bottom:90px; left:50%; transform:translateX(-50%) translateY(20px); opacity:0;
+  background:rgba(30,15,10,.9); color:#fdf2ea; padding:10px 18px; border-radius:20px; font-size:12.5px; z-index:200;
+  transition: all .25s ease; pointer-events:none; max-width:85%; text-align:center;
+}
+#toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+.hidden-file-input{ display:none; }
+
+/* ---- lock screen ---- */
+#screen-lock{ background: linear-gradient(160deg,#4a2c1f,#6b4530); align-items:center; justify-content:center; }
+.lock-card{
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px;
+  padding:30px; text-align:center; width:100%;
+}
+.lock-emoji{font-size:44px;}
+.lock-heading{font-family:'Dancing Script',cursive; font-size:24px; color:#fbe7ec;}
+.lock-input{
+  width:78%; text-align:center; font-size:17px; padding:12px 16px; border-radius:24px; border:none;
+  background:rgba(255,255,255,.92); color:var(--ink);
+}
+.lock-error{ color:#f6b9c6; font-size:12.5px; min-height:16px; }
+.lock-input.shake{ animation:shakeX .3s; }
+
+@keyframes flipFast { from{transform:rotateY(0deg);} to{transform:rotateY(var(--flipDeg));} }
+
+/* ---- small phone tweaks ---- */
+@media (max-height:700px){
+  .cover-title{font-size:28px;}
+  .cover-book{padding:14px;}
+  .cover-open-btn{margin-top:14px; padding:10px 26px; font-size:14px;}
+  .cover-bottomnav{margin-top:10px; padding:8px 12px;}
+}
+@media (max-width:360px){
+  .sticker-grid{grid-template-columns:repeat(6,1fr);}
+  .cover-title{font-size:26px;}
+  .nav-btn{width:38px;height:38px;font-size:15px;}
+  .nav-btn.primary{width:44px;height:44px;}
+}
+@media (max-width:340px){
+  .editor-meta .meta-title{font-size:13px;}
+  .frame-grid .frame-opt{width:44px;height:54px;}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- COVER -->
+  <div class="screen active" id="screen-cover">
+    <div class="cover-topbar">
+      <span class="menu-ico" onclick="goSettings()">☰</span>
+      <div class="lock-badge">🔒</div>
+    </div>
+    <div class="cover-book">
+      <div class="cover-title">Our Little<br><small>♥ Memories</small></div>
+      <div class="cover-ribbon"></div>
+    </div>
+    <button class="cover-open-btn" onclick="openBook()">📖 Open the book</button>
+    <div class="cover-bottomnav">
+    </div>
+  </div>
+
+  <!-- BOOK -->
+  <div class="screen" id="screen-book">
+    <div class="book-topbar">
+      <div style="display:flex; gap:4px;">
+        <button class="ico-btn" onclick="goCover()">🏠</button>
+        <button class="ico-btn" onclick="deleteCurrentPage()">🗑️</button>
+      </div>
+      <span class="title-mini">🌸 Our Little Memories</span>
+      <div style="display:flex; gap:4px;">
+        <button class="ico-btn" onclick="openSearch()">🔍</button>
+        <button class="ico-btn" onclick="startAddPage()">➕</button>
+      </div>
+    </div>
+    <div class="book-stage" id="bookStage">
+      <div class="page-rings">
+        <div class="page-ring" style="top:10%;"></div>
+        <div class="page-ring" style="top:50%;"></div>
+        <div class="page-ring" style="top:90%;"></div>
+      </div>
+      <div id="bookPagesContainer" style="position:absolute; inset:0;"></div>
+    </div>
+    <div class="book-nav-arrows">
+      <div class="arrow-btn" onclick="flipPrev()">‹</div>
+      <div class="page-counter" id="pageCounter">0 / 0</div>
+      <div class="arrow-btn" onclick="flipNext()">›</div>
+      <div class="arrow-btn" style="margin-left:10px;" onclick="goSettings()">⚙️</div>
+    </div>
+  </div>
+
+  <!-- EDITOR -->
+  <div class="screen" id="screen-editor">
+    <div class="editor-topbar">
+      <button class="ico-btn" onclick="closeEditor(false)">✕</button>
+      <button class="ico-btn" id="editorDeleteBtn" onclick="deleteEditingPage()" style="display:none;">🗑</button>
+      <button class="editor-save-btn" onclick="closeEditor(true)">Save page</button>
+    </div>
+    <div class="editor-meta">
+      <input class="meta-title" id="metaTitle" placeholder="Page title…" maxlength="40">
+      <input class="meta-date" id="metaDate" type="date">
+    </div>
+    <div class="editor-canvas-wrap">
+      <div class="editor-canvas" id="editorCanvas"></div>
+      <canvas id="liveDrawCanvas"></canvas>
+    </div>
+    <div class="editor-toolbar" id="editorToolbar">
+      <div class="tool-btn" onclick="toggleSubpanel('panel-photo')"><div class="tool-ico">🖼️</div>Photo</div>
+      <div class="tool-btn" onclick="addTextEl()"><div class="tool-ico">T</div>Text</div>
+      <div class="tool-btn" onclick="toggleSubpanel('panel-sticker')"><div class="tool-ico">✨</div>Sticker</div>
+      <div class="tool-btn" onclick="toggleSubpanel('panel-tape')"><div class="tool-ico">🎀</div>Tape</div>
+      <div class="tool-btn" onclick="toggleSubpanel('panel-bg')"><div class="tool-ico">🎨</div>Paper</div>
+      <div class="tool-btn" onclick="toggleSubpanel('panel-frame')"><div class="tool-ico">🖼</div>Frame</div>
+      <div class="tool-btn" onclick="toggleSubpanel('panel-pageframe')"><div class="tool-ico">🎗️</div>Border</div>
+      <div class="tool-btn" onclick="toggleSubpanel('panel-puzzle')"><div class="tool-ico">🧩</div>Puzzle</div>
+      <div class="tool-btn" onclick="toggleSubpanel('panel-media')"><div class="tool-ico">🎵</div>Song</div>
+    </div>
+    <div class="editor-toolbar draw-toolbar" id="drawModeBar" style="display:none;">
+      <div class="draw-colors">
+        <div class="swatch" style="background:#3a2a2a;" onclick="setLiveDrawColor('#3a2a2a')"></div>
+        <div class="swatch" style="background:#c9536a;" onclick="setLiveDrawColor('#c9536a')"></div>
+        <div class="swatch" style="background:#c9a268;" onclick="setLiveDrawColor('#c9a268')"></div>
+        <div class="swatch" style="background:#7e9ad1;" onclick="setLiveDrawColor('#7e9ad1')"></div>
+        <div class="swatch" style="background:#8cae7a;" onclick="setLiveDrawColor('#8cae7a')"></div>
+      </div>
+      <input class="draw-size" type="range" min="2" max="22" value="4" id="liveDrawSize">
+      <div class="draw-tools">
+        <button id="liveBrushBtn" class="active" onclick="setLiveDrawTool('brush')">🖌️</button>
+        <button id="liveEraserBtn" onclick="setLiveDrawTool('eraser')">🧹</button>
+        <button onclick="liveDrawUndo()">↺</button>
+        <button onclick="liveDrawRedo()">↻</button>
+        <button onclick="exitLiveDraw(false)">✕</button>
+        <button onclick="exitLiveDraw(true)" style="background:var(--rose-deep);">✓</button>
+      </div>
+    </div>
+
+    <!-- subpanels -->
+    <div class="subpanel" id="panel-photo">
+      <div class="subpanel-header"><h4>Add a photo</h4><button class="subpanel-close" onclick="closeAllSubpanels()">✕</button></div>
+      <button class="editor-save-btn" onclick="closeAllSubpanels(); document.getElementById('photoInput').click();">Choose photo</button>
+      <input class="hidden-file-input" type="file" id="photoInput" accept="image/*" onchange="handlePhotoUpload(event)">
+    </div>
+    <div class="subpanel" id="panel-media">
+      <div class="subpanel-header"><h4>Add a song or video</h4><button class="subpanel-close" onclick="closeAllSubpanels()">✕</button></div>
+      <button class="editor-save-btn" onclick="closeAllSubpanels(); document.getElementById('audioInput').click();">Choose song</button>
+      <input class="hidden-file-input" type="file" id="audioInput" accept="audio/*" onchange="handleAudioUpload(event)">
+      <p style="font-size:11px;color:#9a7d86;margin-top:10px;">Large song/video files play during this session but may not be saved permanently in your browser's storage.</p>
+      <button class="editor-save-btn" style="margin-top:6px;" onclick="closeAllSubpanels(); document.getElementById('videoInput').click();">Choose video</button>
+      <input class="hidden-file-input" type="file" id="videoInput" accept="video/*" onchange="handleVideoUpload(event)">
+    </div>
+    <div class="subpanel" id="panel-sticker">
+      <div class="subpanel-header"><h4>Stickers</h4><button class="subpanel-close" onclick="closeAllSubpanels()">✕</button></div>
+      <div class="sticker-grid">
+        <button onclick="addSticker('💖')">💖</button><button onclick="addSticker('💕')">💕</button>
+        <button onclick="addSticker('💗')">💗</button><button onclick="addSticker('💞')">💞</button>
+        <button onclick="addSticker('😍')">😍</button><button onclick="addSticker('🥰')">🥰</button>
+        <button onclick="addSticker('😘')">😘</button><button onclick="addSticker('💏')">💏</button>
+        <button onclick="addSticker('💍')">💍</button><button onclick="addSticker('🌸')">🌸</button>
+        <button onclick="addSticker('🎀')">🎀</button><button onclick="addSticker('✨')">✨</button>
+        <button onclick="addSticker('🌷')">🌷</button><button onclick="addSticker('🦋')">🦋</button>
+        <button onclick="addSticker('💌')">💌</button><button onclick="addSticker('🕊️')">🕊️</button>
+        <button onclick="addSticker('🌼')">🌼</button><button onclick="addSticker('💐')">💐</button>
+        <button onclick="addSticker('🌹')">🌹</button><button onclick="addSticker('🌺')">🌺</button>
+        <button onclick="addSticker('🌻')">🌻</button><button onclick="addSticker('🪻')">🪻</button>
+        <button onclick="addSticker('🌿')">🌿</button><button onclick="addSticker('🍀')">🍀</button>
+        <button onclick="addSticker('⭐')">⭐</button><button onclick="addSticker('🍃')">🍃</button>
+        <button onclick="addSticker('🧸')">🧸</button><button onclick="addSticker('🔖')">🔖</button>
+        <button onclick="addSticker('🦢')">🦢</button><button onclick="addSticker('🐰')">🐰</button>
+        <button onclick="addSticker('🐶')">🐶</button><button onclick="addSticker('🐱')">🐱</button>
+        <button onclick="addSticker('🦄')">🦄</button><button onclick="addSticker('🍰')">🍰</button>
+        <button onclick="addSticker('🧁')">🧁</button><button onclick="addSticker('🍓')">🍓</button>
+        <button onclick="addSticker('🍒')">🍒</button><button onclick="addSticker('☕')">☕</button>
+        <button onclick="addSticker('🍯')">🍯</button><button onclick="addSticker('🎈')">🎈</button>
+        <button onclick="addSticker('🎉')">🎉</button><button onclick="addSticker('🌙')">🌙</button>
+        <button onclick="addSticker('☀️')">☀️</button><button onclick="addSticker('🌈')">🌈</button>
+        <button onclick="addSticker('❄️')">❄️</button><button onclick="addSticker('🔥')">🔥</button>
+        <button onclick="addSticker('📷')">📷</button><button onclick="addSticker('📍')">📍</button>
+        <button onclick="addSticker('🗝️')">🗝️</button><button onclick="addSticker('👑')">👑</button>
+        <button onclick="addSticker('💎')">💎</button><button onclick="addSticker('🎁')">🎁</button>
+      </div>
+    </div>
+    <div class="subpanel" id="panel-tape">
+      <div class="subpanel-header"><h4>Washi tape</h4><button class="subpanel-close" onclick="closeAllSubpanels()">✕</button></div>
+      <div class="tape-grid">
+        <div class="tape-opt" style="background:#e2a3b1;" onclick="addTape('#e2a3b1')"></div>
+        <div class="tape-opt" style="background:#c9a268;" onclick="addTape('#c9a268')"></div>
+        <div class="tape-opt" style="background:#9bb88a;" onclick="addTape('#9bb88a')"></div>
+        <div class="tape-opt" style="background:#8aa6c9;" onclick="addTape('#8aa6c9')"></div>
+        <div class="tape-opt" style="background:#5e2236;" onclick="addTape('#5e2236')"></div>
+      </div>
+    </div>
+    <div class="subpanel" id="panel-bg">
+      <div class="subpanel-header"><h4>Paper background</h4><button class="subpanel-close" onclick="closeAllSubpanels()">✕</button></div>
+      <div class="swatch-row">
+        <div class="bg-pick bg-cream" onclick="setPageBg('cream')">cream</div>
+        <div class="bg-pick bg-blush" onclick="setPageBg('blush')">blush</div>
+        <div class="bg-pick bg-burgundy" onclick="setPageBg('burgundy')">deep</div>
+        <div class="bg-pick bg-kraft" onclick="setPageBg('kraft')">kraft</div>
+      </div>
+    </div>
+    <div class="subpanel" id="panel-frame">
+      <div class="subpanel-header"><h4>Photo frames</h4><button class="subpanel-close" onclick="closeAllSubpanels()">✕</button></div>
+      <div class="frame-grid">
+        <div class="frame-opt" onclick="addFrame('square')" style="display:flex;align-items:center;justify-content:center;font-size:9px;color:#a85a6c;">Paper</div>
+        <div class="frame-opt" style="border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;color:#a85a6c;" onclick="addFrame('round')">Round</div>
+        <div class="frame-opt" style="border-style:dashed;display:flex;align-items:center;justify-content:center;font-size:9px;color:#a85a6c;" onclick="addFrame('dashed')">Dashed</div>
+        <div class="frame-opt" style="border-style:double;border-width:5px;display:flex;align-items:center;justify-content:center;font-size:9px;color:#a85a6c;" onclick="addFrame('scallop')">Ornate</div>
+        <div class="frame-opt" style="border:none;background:#fffaf3;clip-path:polygon(4% 6%,20% 0%,40% 5%,60% 0%,80% 5%,100% 10%,96% 30%,100% 55%,94% 78%,100% 100%,70% 94%,40% 100%,12% 92%,0% 70%,6% 40%);display:flex;align-items:center;justify-content:center;font-size:9px;color:#a85a6c;" onclick="addFrame('torn')">Torn</div>
+        <div class="frame-opt" onclick="addPolaroid()" style="border:none;background:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;color:#888;">Polaroid</div>
+        <div class="frame-opt" style="border:none;background:#fffaf3;clip-path:polygon(50% 18%,61% 6%,75% 0%,88% 4%,97% 15%,99% 28%,93% 44%,80% 60%,50% 90%,20% 60%,7% 44%,1% 28%,3% 15%,12% 4%,25% 0%,39% 6%);display:flex;align-items:center;justify-content:center;font-size:9px;color:#a85a6c;" onclick="addFrame('heart')">Heart</div>
+        <div class="frame-opt" style="border:none;background:#fffaf3;clip-path:polygon(25% 2%,75% 2%,100% 50%,75% 98%,25% 98%,0% 50%);display:flex;align-items:center;justify-content:center;font-size:9px;color:#a85a6c;" onclick="addFrame('hexagon')">Hexagon</div>
+        <div class="frame-opt" style="border:none;background:#fffaf3;clip-path:polygon(30% 0%,70% 0%,100% 30%,100% 70%,70% 100%,30% 100%,0% 70%,0% 30%);display:flex;align-items:center;justify-content:center;font-size:9px;color:#a85a6c;" onclick="addFrame('octagon')">Octagon</div>
+        <div class="frame-opt" style="border:none;background:#fffaf3;clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);display:flex;align-items:center;justify-content:center;font-size:9px;color:#a85a6c;" onclick="addFrame('diamond')">Diamond</div>
+        <div class="frame-opt" style="border:none;background:#fffaf3;clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);display:flex;align-items:center;justify-content:center;font-size:9px;color:#a85a6c;" onclick="addFrame('star')">Star</div>
+        <div class="frame-opt" style="border:none;background:#fffaf3;border-radius:50% 50% 6px 6px / 65% 65% 6px 6px;display:flex;align-items:center;justify-content:center;font-size:9px;color:#a85a6c;" onclick="addFrame('arch')">Arch</div>
+      </div>
+    </div>
+    <div class="subpanel" id="panel-pageframe">
+      <div class="subpanel-header"><h4>Page border</h4><button class="subpanel-close" onclick="closeAllSubpanels()">✕</button></div>
+      <div class="swatch-row">
+        <div class="bg-pick" style="background:#fdf6ec;border:2px solid #e8dcc8;color:#a85a6c;" onclick="setPageFrame('none')">none</div>
+        <div class="bg-pick" style="background:#fdf6ec;border:4px double #c9a268;color:#a85a6c;" onclick="setPageFrame('gold')">gold</div>
+        <div class="bg-pick" style="background:#fdf6ec;border:3px dashed #c9a268;color:#a85a6c;" onclick="setPageFrame('lace')">🌸 lace</div>
+        <div class="bg-pick" style="background:#fdf6ec;border:3px dotted #c97b8c;color:#a85a6c;" onclick="setPageFrame('hearts')">💕 hearts</div>
+      </div>
+    </div>
+    <div class="subpanel" id="panel-puzzle">
+      <div class="subpanel-header"><h4>Puzzle page</h4><button class="subpanel-close" onclick="closeAllSubpanels()">✕</button></div>
+      <p style="font-size:11.5px;color:#9a7d86;margin:0 0 10px;">Pick a photo, then save it as a puzzle anyone can play and solve right inside the book.</p>
+      <div style="display:flex; gap:8px; margin-bottom:10px;">
+        <button class="font-opt" id="puzzleGrid3" onclick="setPuzzleGridChoice(3)" style="background:var(--rose-deep);color:#fff;">3 × 3</button>
+        <button class="font-opt" id="puzzleGrid4" onclick="setPuzzleGridChoice(4)">4 × 4</button>
+        <button class="font-opt" id="puzzleGrid5" onclick="setPuzzleGridChoice(5)">5 × 5</button>
+      </div>
+      <button class="editor-save-btn" onclick="closeAllSubpanels(); document.getElementById('puzzleInput').click();">Choose photo</button>
+      <input class="hidden-file-input" type="file" id="puzzleInput" accept="image/*" onchange="handlePuzzlePhoto(event)">
+    </div>
+    <div class="subpanel" id="panel-textedit">
+      <div class="subpanel-header"><h4>Edit text</h4><button class="subpanel-close" onclick="closeTextEdit()">✕</button></div>
+      <textarea id="textEditArea" rows="3" placeholder="Write here…" style="width:100%;border-radius:10px;border:1px solid #eed7dd;padding:8px 10px;font-family:'Caveat',cursive;font-size:18px;color:#5a3744;resize:none;" oninput="onTextEditInput()"></textarea>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:10px;">
+        <span style="font-size:11px;color:#8a6470;">Size</span>
+        <input type="range" id="textSizeRange" min="14" max="46" value="22" style="flex:1;" oninput="onTextSizeInput()">
+      </div>
+      <div class="swatch-row" style="margin-top:10px;">
+        <div class="swatch" style="background:#5a3744;" onclick="setTextColor('#5a3744')"></div>
+        <div class="swatch" style="background:#c9536a;" onclick="setTextColor('#c9536a')"></div>
+        <div class="swatch" style="background:#a85a6c;" onclick="setTextColor('#a85a6c')"></div>
+        <div class="swatch" style="background:#7e9ad1;" onclick="setTextColor('#7e9ad1')"></div>
+        <div class="swatch" style="background:#c9a268;" onclick="setTextColor('#c9a268')"></div>
+        <div class="swatch" style="background:#3a2a2a;" onclick="setTextColor('#3a2a2a')"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PUZZLE OVERLAY -->
+  <div class="puzzle-overlay" id="puzzleOverlay">
+    <div class="puzzle-sheet">
+      <div class="puzzle-head">
+        <span class="puzzle-title">🧩 Puzzle</span>
+        <button class="ico-btn" style="color:var(--ink);" onclick="closePuzzleOverlay()">✕</button>
+      </div>
+      <div class="puzzle-board-wrap">
+        <div class="puzzle-board" id="puzzleBoard"></div>
+        <div class="puzzle-solved-banner" id="puzzleSolvedBanner" style="display:none;">🎉 Solved! 🎉</div>
+      </div>
+      <div class="puzzle-actions">
+        <button class="editor-save-btn" style="background:#f3e3e8;color:var(--rose-darker);" onclick="shufflePuzzle()">Shuffle</button>
+        <button class="editor-save-btn" onclick="closePuzzleOverlay()">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOCK -->
+  <div class="screen" id="screen-lock">
+    <div class="lock-card">
+      <div class="lock-emoji">🔒</div>
+      <div class="lock-heading">Enter the password</div>
+      <input class="lock-input" id="lockInput" type="text" placeholder="Type the password…" onkeydown="if(event.key==='Enter') checkPassword();">
+      <button class="cover-open-btn" onclick="checkPassword()">Open the book 💕</button>
+      <div class="lock-error" id="lockError"></div>
+    </div>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="screen" id="screen-search">
+    <div class="search-bar-wrap">
+      <button class="ico-btn" style="color:#f5e6da;" onclick="closeSearch()">‹</button>
+      <input class="search-input" id="searchInput" placeholder="Search page title…" oninput="renderSearchResults()">
+    </div>
+    <div class="search-results" id="searchResults"></div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="screen" id="screen-settings">
+    <div class="book-topbar">
+      <button class="ico-btn" onclick="goCover()">‹</button>
+      <span class="title-mini">Settings</span>
+      <span style="width:20px;"></span>
+    </div>
+    <div class="settings-card">
+      <h4>About this book</h4>
+      <p>Our Little Memories is your own handmade scrapbook. Without a sync server, everything you add stays only on this device, in this browser.</p>
+    </div>
+    <div class="settings-card">
+      <h4>Sync server (optional)</h4>
+      <p>Connect this book to a free online database (Firebase) so every device using the same link sees the same pages. Paste your database link below — see the guide for the 5-minute free setup.</p>
+      <input id="syncUrlInput" placeholder="https://your-project-default-rtdb.firebaseio.com/pages.json" style="width:100%;padding:9px 12px;border-radius:10px;border:1px solid #eed7dd;margin-bottom:8px;font-size:13px;">
+      <input id="syncKeyInput" placeholder="Optional auth key (leave blank for Firebase test mode)" style="width:100%;padding:9px 12px;border-radius:10px;border:1px solid #eed7dd;margin-bottom:10px;font-size:13px;">
+      <div style="display:flex;gap:8px;">
+        <button class="editor-save-btn" style="flex:1;text-align:center;" onclick="saveSyncSettings()">Save</button>
+        <button class="editor-save-btn" style="flex:1;text-align:center;background:#f3e3e8;color:var(--rose-darker);" onclick="syncNow()">Sync now</button>
+      </div>
+      <p id="syncStatus" style="margin-top:8px;margin-bottom:0;font-size:11.5px;color:#9a7d86;"></p>
+    </div>
+    <div class="settings-card">
+      <h4>Reset book</h4>
+      <p>This permanently erases every page you've created on this device. There's no undo.</p>
+      <button class="danger-btn" onclick="resetBook()">Erase all memories</button>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+</div>
+
+<script>
+/* ============================================================
+   STATE
+============================================================ */
+let pages = [];          // {id,title,date,bg,elements:[]}
+let currentIndex = 0;
+let editingPage = null;  // working copy while in editor
+let editingIsNew = false;
+let selectedElId = null;
+let storageReady = false;
+
+const STORAGE_KEY = 'olm-pages-v1';
+
+function uid(){ return 'id'+Math.random().toString(36).slice(2,10)+Date.now().toString(36); }
+
+/* ============================================================
+   PERSISTENCE — always saves to this browser's localStorage.
+   If a sync URL is configured (Settings screen), it also
+   pushes/pulls pages from there so every device using the same
+   link sees the same book. Works two ways:
+   - Firebase Realtime Database URL (free, no server to run) —
+     auto-detected, just GET/PUT raw JSON.
+   - A custom server (like the Termux one) — GET/POST /pages
+     with an X-Book-Key header.
+============================================================ */
+const SYNC_URL_KEY = 'olm-sync-url';
+const SYNC_KEY_KEY = 'olm-sync-key';
+const DEFAULT_SYNC_URL = 'https://our-little-memories-4f5c9-default-rtdb.firebaseio.com/pages.json';
+function getSyncConfig(){
+  let url = localStorage.getItem(SYNC_URL_KEY);
+  if(url === null){
+    url = DEFAULT_SYNC_URL;
+    try{ localStorage.setItem(SYNC_URL_KEY, url); }catch(e){}
+  }
+  return {
+    url: (url||'').trim(),
+    key: (localStorage.getItem(SYNC_KEY_KEY)||'').trim()
+  };
+}
+function isFirebaseUrl(url){
+  return /firebaseio\.com|firebasedatabase\.app/.test(url);
+}
+async function fetchServerPages(url, key){
+  if(isFirebaseUrl(url)){
+    const finalUrl = key ? (url + (url.includes('?')?'&':'?') + 'auth='+encodeURIComponent(key)) : url;
+    const res = await fetch(finalUrl);
+    if(!res.ok) throw new Error('network error');
+    const data = await res.json();
+    if(Array.isArray(data)) return data;
+    if(data && Array.isArray(data.pages)) return data.pages;
+    return [];
+  } else {
+    const res = await fetch(url.replace(/\/$/,'')+'/pages', { headers: { 'X-Book-Key': key } });
+    if(!res.ok) throw new Error('network or auth error');
+    const data = await res.json();
+    return (data && Array.isArray(data.pages)) ? data.pages : [];
+  }
+}
+async function pushServerPages(url, key, pagesArr){
+  if(isFirebaseUrl(url)){
+    const finalUrl = key ? (url + (url.includes('?')?'&':'?') + 'auth='+encodeURIComponent(key)) : url;
+    await fetch(finalUrl, { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(pagesArr) });
+  } else {
+    await fetch(url.replace(/\/$/,'')+'/pages', {
+      method:'POST',
+      headers: { 'Content-Type':'application/json', 'X-Book-Key': key },
+      body: JSON.stringify({ pages: pagesArr })
+    });
+  }
+}
+async function loadPages(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){ pages = JSON.parse(raw); }
+  }catch(e){ pages = []; }
+  storageReady = true;
+  const { url, key } = getSyncConfig();
+  if(url){
+    try{
+      const serverPages = await fetchServerPages(url, key);
+      if(Array.isArray(serverPages)){
+        pages = serverPages;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(pages));
+      }
+    }catch(e){ /* server unreachable — keep using local copy */ }
+  }
+}
+async function savePages(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(pages)); }
+  catch(e){ showToast('Could not save — your photos/videos may be too large for this browser\'s storage.'); }
+  const { url, key } = getSyncConfig();
+  if(url){
+    try{ await pushServerPages(url, key, pages); }
+    catch(e){ /* server unreachable — local save above already happened */ }
+  }
+}
+function saveSyncSettings(){
+  const url = document.getElementById('syncUrlInput').value.trim();
+  const key = document.getElementById('syncKeyInput').value.trim();
+  localStorage.setItem(SYNC_URL_KEY, url);
+  localStorage.setItem(SYNC_KEY_KEY, key);
+  document.getElementById('syncStatus').textContent = url ? 'Saved. Tap "Sync now" to connect.' : 'Sync server cleared — this device will only save locally.';
+}
+async function syncNow(){
+  const status = document.getElementById('syncStatus');
+  status.textContent = 'Syncing…';
+  const { url, key } = getSyncConfig();
+  if(!url){ status.textContent = 'No sync link set yet.'; return; }
+  try{
+    const serverPages = await fetchServerPages(url, key);
+    if(serverPages.length >= pages.length){ pages = serverPages; }
+    await savePages();
+    status.textContent = 'Synced ✓ ('+pages.length+' page(s))';
+    if(document.getElementById('screen-book').classList.contains('active')) renderBook();
+  }catch(e){
+    status.textContent = 'Could not reach the server — check the link.';
+  }
+}
+
+/* ============================================================
+   NAVIGATION
+============================================================ */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+const BOOK_PASSWORD = 'نعشقك';
+let bookUnlocked = false;
+
+function goCover(){ showScreen('screen-cover'); }
+function openBook(){
+  if(!bookUnlocked){
+    showScreen('screen-lock');
+    setTimeout(()=>{ const i=document.getElementById('lockInput'); if(i) i.focus(); },200);
+    return;
+  }
+  showScreen('screen-book'); renderBook();
+}
+function checkPassword(){
+  const inp = document.getElementById('lockInput');
+  const val = (inp.value||'').trim();
+  if(val === BOOK_PASSWORD){
+    bookUnlocked = true;
+    document.getElementById('lockError').textContent='';
+    inp.value='';
+    showScreen('screen-book'); renderBook();
+  } else {
+    document.getElementById('lockError').textContent='Wrong password, try again 🤍';
+    inp.classList.remove('shake');
+    requestAnimationFrame(()=>inp.classList.add('shake'));
+    setTimeout(()=>inp.classList.remove('shake'),320);
+  }
+}
+function goSettings(){
+  showScreen('screen-settings');
+  const { url, key } = getSyncConfig();
+  const urlInput = document.getElementById('syncUrlInput');
+  const keyInput = document.getElementById('syncKeyInput');
+  if(urlInput) urlInput.value = url;
+  if(keyInput) keyInput.value = key;
+  const status = document.getElementById('syncStatus');
+  if(status) status.textContent = url ? 'Sync server is set.' : '';
+}
+
+let toastTimer=null;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+/* ============================================================
+   BOOK RENDERING + FLIP
+============================================================ */
+const stage = ()=>document.getElementById('bookPagesContainer');
+
+function renderBook(){
+  const s = stage();
+  s.innerHTML='';
+  if(pages.length===0){
+    s.innerHTML = `<div class="page-empty">
+      <div class="big-emoji">🌷</div>
+      <h3>This book is empty</h3>
+      <p>Tap the ＋ button below to create<br>your very first memory page.</p>
+    </div>`;
+    document.getElementById('pageCounter').textContent='0 / 0';
+    return;
+  }
+  if(currentIndex>=pages.length) currentIndex=pages.length-1;
+  if(currentIndex<0) currentIndex=0;
+  const card = buildPageCard(pages[currentIndex]);
+  card.id='currentPageCard';
+  s.appendChild(card);
+  document.getElementById('pageCounter').textContent = (currentIndex+1)+' / '+pages.length;
+  attachSwipe(s);
+}
+
+function bgClass(bg){ return 'bg-'+(bg||'cream'); }
+
+function buildPageCard(page){
+  const card = document.createElement('div');
+  card.className='page-card';
+  const surf = document.createElement('div');
+  surf.className='page-surface '+bgClass(page.bg);
+  if(page.title){
+    const tag=document.createElement('div');
+    tag.className='page-title-tag';
+    tag.textContent=page.title;
+    surf.appendChild(tag);
+  }
+  const layer=document.createElement('div');
+  layer.className='page-elements-layer';
+  (page.elements||[]).forEach(el=>layer.appendChild(renderElementStatic(el)));
+  surf.appendChild(layer);
+  if(page.date){
+    const d=document.createElement('div');
+    d.className='page-date-tag';
+    d.textContent=page.date;
+    surf.appendChild(d);
+  }
+  const frameHTML = pageFrameOverlayHTML(page.pageFrame);
+  if(frameHTML){
+    const fwrap=document.createElement('div');
+    fwrap.innerHTML = frameHTML;
+    surf.appendChild(fwrap.firstElementChild);
+  }
+  card.appendChild(surf);
+  return card;
+}
+function pageFrameOverlayHTML(kind){
+  if(!kind || kind==='none') return '';
+  const corner = kind==='lace' ? '🌸' : kind==='hearts' ? '💕' : '✦';
+  let border;
+  if(kind==='hearts') border = '3px dotted #c97b8c';
+  else if(kind==='lace') border = '3px dashed #c9a268';
+  else border = '5px double #c9a268';
+  return `<div class="page-frame-overlay" style="border:${border};">
+    <span class="pf-corner tl">${corner}</span><span class="pf-corner tr">${corner}</span>
+    <span class="pf-corner bl">${corner}</span><span class="pf-corner br">${corner}</span>
+  </div>`;
+}
+
+function renderElementStatic(el){
+  const wrap=document.createElement('div');
+  wrap.className='canvas-el';
+  wrap.style.left=el.x+'%'; wrap.style.top=el.y+'%';
+  wrap.style.width=el.w+'%'; wrap.style.height=el.h+'%';
+  wrap.style.transform=`translate(-50%,-50%) rotate(${el.rot||0}deg)`;
+  wrap.style.zIndex=el.z||1;
+  fillElementContent(wrap, el);
+  return wrap;
+}
+
+function mediaFrameHTML(innerTag, el){
+  const f = el.frame || 'square';
+  if(f==='polaroid') return `<div class="el-polaroid" style="width:100%;height:100%;">${innerTag}</div>`;
+  if(f==='round') return `<div class="el-photocard el-photocard-round">${innerTag}</div>`;
+  if(f==='scallop') return `<div class="el-photocard el-photocard-scallop">${innerTag}</div>`;
+  if(f==='dashed') return `<div class="el-photocard el-photocard-dashed">${innerTag}</div>`;
+  if(f==='torn') return `<div class="el-photocard el-photocard-torn">${innerTag}</div>`;
+  if(f==='heart') return `<div class="el-photocard el-photocard-heart">${innerTag}</div>`;
+  if(f==='hexagon') return `<div class="el-photocard el-photocard-hexagon">${innerTag}</div>`;
+  if(f==='octagon') return `<div class="el-photocard el-photocard-octagon">${innerTag}</div>`;
+  if(f==='diamond') return `<div class="el-photocard el-photocard-diamond">${innerTag}</div>`;
+  if(f==='star') return `<div class="el-photocard el-photocard-star">${innerTag}</div>`;
+  if(f==='arch') return `<div class="el-photocard el-photocard-arch">${innerTag}</div>`;
+  return `<div class="el-photocard">${innerTag}</div>`;
+}
+function fillElementContent(wrap, el){
+  if(el.type==='image'){
+    wrap.innerHTML = mediaFrameHTML(`<img src="${el.src}">`, el);
+  } else if(el.type==='text'){
+    const div=document.createElement('div');
+    div.className='el-text';
+    div.style.fontFamily = el.font||"'Caveat',cursive";
+    div.style.color = el.color||'#5a3744';
+    div.style.fontSize=(el.fontSize||22)+'px';
+    div.textContent = el.text||'';
+    wrap.appendChild(div);
+  } else if(el.type==='sticker'){
+    wrap.innerHTML = `<div class="el-sticker">${el.emoji}</div>`;
+  } else if(el.type==='tape'){
+    wrap.innerHTML = `<div class="el-tape" style="width:100%;height:100%;background-color:${el.color};"></div>`;
+  } else if(el.type==='drawing'){
+    wrap.innerHTML = `<img src="${el.src}" style="width:100%;height:100%;object-fit:contain;">`;
+  } else if(el.type==='audio'){
+    wrap.innerHTML = `<div class="el-cassette"><div class="reels"><div class="reel"></div><div class="reel"></div></div><div class="label">🎵 ${el.name||'song'}</div></div>`;
+  } else if(el.type==='video'){
+    wrap.innerHTML = mediaFrameHTML(`<video src="${el.src}" controls></video>`, el);
+  } else if(el.type==='puzzle'){
+    const cls = el.solved ? 'el-puzzle solved' : 'el-puzzle';
+    const label = el.solved ? '✓ Solved — tap to view' : 'Tap to solve';
+    wrap.innerHTML = `<div class="${cls}" onclick="openPuzzleFromAny('${el.id}')">🧩<div class="puzzle-label">${label}</div></div>`;
+  }
+}
+
+/* ---- swipe / flip ---- */
+let touchStartX=0, touchDeltaX=0, touching=false;
+function attachSwipe(container){
+  container.ontouchstart = (e)=>{
+    if(e.target.closest('.page-empty')) return;
+    touching=true; touchStartX=e.touches[0].clientX; touchDeltaX=0;
+  };
+  container.ontouchmove = (e)=>{
+    if(!touching) return;
+    touchDeltaX = e.touches[0].clientX - touchStartX;
+    const card=document.getElementById('currentPageCard');
+    if(card){
+      const deg = Math.max(-60,Math.min(60, touchDeltaX/4));
+      card.style.transformOrigin = touchDeltaX<0 ? 'left center':'right center';
+      card.style.transform = `rotateY(${touchDeltaX<0? -Math.abs(deg): Math.abs(deg)}deg)`;
+    }
+  };
+  container.ontouchend = ()=>{
+    touching=false;
+    const card=document.getElementById('currentPageCard');
+    if(card) card.style.transform='';
+    if(touchDeltaX < -60) flipNext();
+    else if(touchDeltaX > 60) flipPrev();
+    touchDeltaX=0;
+  };
+}
+
+function flipNext(){ animateFlip(1); }
+function flipPrev(){ animateFlip(-1); }
+
+function deleteCurrentPage(){
+  if(pages.length===0){ showToast('No page to delete 🌷'); return; }
+  if(!confirm('Delete this page? This cannot be undone.')) return;
+  pages.splice(currentIndex,1);
+  if(currentIndex>=pages.length) currentIndex = Math.max(0, pages.length-1);
+  savePages();
+  renderBook();
+  showToast('Page deleted 🗑');
+}
+
+function animateFlip(dir, fast){
+  if(pages.length===0) return;
+  const newIndex = currentIndex+dir;
+  if(newIndex<0 || newIndex>=pages.length) return;
+  const card = document.getElementById('currentPageCard');
+  if(!card){ currentIndex=newIndex; renderBook(); return; }
+  const dur = fast? 130 : 260;
+  const shade = document.createElement('div');
+  shade.className='flip-shade';
+  card.appendChild(shade);
+  requestAnimationFrame(()=>{
+    shade.style.transition = `opacity ${Math.round(dur*0.55)}ms linear`;
+    shade.style.opacity = '0.6';
+  });
+  setTimeout(()=>{
+    shade.style.transition = `opacity ${Math.round(dur*0.45)}ms linear`;
+    shade.style.opacity = '0';
+  }, Math.round(dur*0.55));
+  card.style.transition = `transform ${dur}ms ease-in`;
+  card.style.transformOrigin = 'left center';
+  card.style.transform = `rotateY(${dir>0? -150:150}deg)`;
+  setTimeout(()=>{
+    currentIndex=newIndex;
+    renderBook();
+    const newCard=document.getElementById('currentPageCard');
+    if(newCard){
+      newCard.style.transformOrigin = 'left center';
+      newCard.style.transform = `rotateY(${dir>0? 150:-150}deg)`;
+      newCard.style.transition='none';
+      requestAnimationFrame(()=>{
+        newCard.style.transition = `transform ${dur}ms ease-out`;
+        newCard.style.transform = 'rotateY(0deg)';
+      });
+    }
+  }, dur);
+}
+
+function flipToPage(targetIndex){
+  showScreen('screen-book');
+  if(targetIndex===currentIndex){ renderBook(); return; }
+  const dir = targetIndex>currentIndex ? 1 : -1;
+  const steps = Math.abs(targetIndex-currentIndex);
+  const cappedSteps = Math.min(steps, 10);
+  let count=0;
+  function step(){
+    if(count>=steps){ renderBook(); return; }
+    const remaining = steps-count;
+    const fast = remaining>2;
+    animateFlip(dir, fast);
+    count++;
+    setTimeout(step, fast?140:270);
+  }
+  renderBook();
+  step();
+}
+
+/* ============================================================
+   ADD PAGE / EDITOR
+============================================================ */
+function startAddPage(){
+  editingPage = {id:uid(), title:'', date: new Date().toISOString().slice(0,10), bg:'cream', elements:[]};
+  editingIsNew = true;
+  openEditorFor(editingPage);
+}
+function editCurrentPage(){
+  if(pages.length===0) return;
+  editingPage = JSON.parse(JSON.stringify(pages[currentIndex]));
+  editingIsNew = false;
+  openEditorFor(editingPage);
+}
+function openEditorFor(page){
+  document.getElementById('metaTitle').value = page.title||'';
+  document.getElementById('metaDate').value = page.date||'';
+  document.getElementById('editorDeleteBtn').style.display = editingIsNew ? 'none' : 'inline-flex';
+  showScreen('screen-editor');
+  renderEditorCanvas();
+}
+function deleteEditingPage(){
+  if(editingIsNew) return;
+  if(!confirm('Permanently delete this page? This cannot be undone.')) return;
+  pages.splice(currentIndex,1);
+  if(currentIndex>=pages.length) currentIndex = Math.max(0, pages.length-1);
+  savePages();
+  editingPage=null;
+  showScreen('screen-book');
+  renderBook();
+  showToast('Page deleted 🗑');
+}
+function renderEditorCanvas(){
+  const c = document.getElementById('editorCanvas');
+  c.innerHTML='';
+  c.className = 'editor-canvas page-surface '+bgClass(editingPage.bg);
+  const layer=document.createElement('div');
+  layer.className='page-elements-layer';
+  layer.style.position='absolute'; layer.style.inset='0'; layer.style.margin='0';
+  layer.id='editorLayer';
+  (editingPage.elements||[]).forEach(el=>{
+    const node = renderElementStatic(el);
+    node.dataset.id = el.id;
+    node.classList.add('canvas-el');
+    makeDraggable(node, el);
+    layer.appendChild(node);
+  });
+  c.appendChild(layer);
+  const frameHTML = pageFrameOverlayHTML(editingPage.pageFrame);
+  if(frameHTML){
+    const fwrap=document.createElement('div');
+    fwrap.innerHTML = frameHTML;
+    fwrap.firstElementChild.style.zIndex='2';
+    c.appendChild(fwrap.firstElementChild);
+  }
+  c.onpointerdown=(e)=>{ if(e.target===c||e.target===layer) deselectAll(); };
+}
+
+function addElement(elData){
+  elData.id = elData.id || uid();
+  elData.z = (editingPage.elements.length||0)+1;
+  editingPage.elements.push(elData);
+  renderEditorCanvas();
+  selectElement(elData.id);
+}
+function addTextEl(){
+  closeAllSubpanels();
+  const newEl = {type:'text', x:50,y:30,w:60,h:18, rot:0, text:'', font:"'Caveat',cursive", color:'#5a3744', fontSize:24};
+  addElement(newEl);
+  startTextEdit(newEl.id);
+}
+function addSticker(emoji){ addElement({type:'sticker', x:50,y:50,w:16,h:16, rot:0, emoji}); }
+function addTape(color){ addElement({type:'tape', x:50,y:20,w:36,h:8, rot:-8, color}); }
+function addFrame(kind){ document.getElementById('photoInput').dataset.frame=kind; toggleSubpanel('panel-photo'); }
+function addPolaroid(){ document.getElementById('photoInput').dataset.frame='polaroid'; toggleSubpanel('panel-photo'); }
+function setPageBg(bg){ editingPage.bg=bg; renderEditorCanvas(); closeAllSubpanels(); }
+function setPageFrame(kind){ editingPage.pageFrame = (kind==='none') ? null : kind; renderEditorCanvas(); closeAllSubpanels(); }
+
+function handlePhotoUpload(e){
+  const file = e.target.files[0]; if(!file) return;
+  const frame = e.target.dataset.frame || 'square';
+  const reader = new FileReader();
+  reader.onload = (ev)=>{
+    const img = new Image();
+    img.onload = ()=>{
+      const dataUrl = compressImage(img, 700);
+      addElement({type:'image', x:50,y:40,w:50,h:36, rot:0, src:dataUrl, frame});
+      closeAllSubpanels();
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+  e.target.value=''; delete e.target.dataset.frame;
+}
+function compressImage(img, maxDim){
+  let w=img.width, h=img.height;
+  if(w>h && w>maxDim){ h=h*maxDim/w; w=maxDim; }
+  else if(h>maxDim){ w=w*maxDim/h; h=maxDim; }
+  const cv=document.createElement('canvas'); cv.width=w; cv.height=h;
+  cv.getContext('2d').drawImage(img,0,0,w,h);
+  return cv.toDataURL('image/jpeg',0.82);
+}
+function handleAudioUpload(e){
+  const file=e.target.files[0]; if(!file) return;
+  const url = URL.createObjectURL(file);
+  addElement({type:'audio', x:50,y:50,w:36,h:24, rot:0, src:url, name:file.name});
+  closeAllSubpanels();
+  showToast('Song added for this session 🎵');
+  e.target.value='';
+}
+function handleVideoUpload(e){
+  const file=e.target.files[0]; if(!file) return;
+  const url = URL.createObjectURL(file);
+  addElement({type:'video', x:50,y:50,w:55,h:35, rot:0, src:url});
+  closeAllSubpanels();
+  showToast('Video added for this session 🎬');
+  e.target.value='';
+}
+
+/* ============================================================
+   PUZZLE PAGE — turn a photo into a playable jigsaw
+============================================================ */
+let puzzleGridChoice = 3;
+function setPuzzleGridChoice(n){
+  puzzleGridChoice = n;
+  ['3','4','5'].forEach(g=>{
+    const btn = document.getElementById('puzzleGrid'+g);
+    if(btn){ btn.style.background = (+g===n) ? 'var(--rose-deep)' : ''; btn.style.color = (+g===n) ? '#fff' : ''; }
+  });
+}
+function handlePuzzlePhoto(e){
+  const file = e.target.files[0]; if(!file) return;
+  const grid = puzzleGridChoice;
+  const reader = new FileReader();
+  reader.onload = (ev)=>{
+    const img = new Image();
+    img.onload = ()=>{
+      const pieces = sliceImageToPieces(img, grid);
+      const total = grid*grid;
+      let order = Array.from({length:total}, (_,i)=>i);
+      order = shuffleArray(order);
+      addElement({type:'puzzle', x:50,y:50,w:74,h:74, rot:0, grid, pieces, order, solved:false});
+      closeAllSubpanels();
+      showToast('Puzzle page added 🧩');
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+  e.target.value='';
+}
+function sliceImageToPieces(img, grid){
+  const size = Math.min(img.width, img.height);
+  const sx = (img.width-size)/2, sy = (img.height-size)/2;
+  const cell = size/grid;
+  const outRes = 220;
+  const pieces = [];
+  for(let r=0;r<grid;r++){
+    for(let c=0;c<grid;c++){
+      const cv=document.createElement('canvas'); cv.width=outRes; cv.height=outRes;
+      const ctx=cv.getContext('2d');
+      ctx.drawImage(img, sx+c*cell, sy+r*cell, cell, cell, 0, 0, outRes, outRes);
+      pieces.push(cv.toDataURL('image/jpeg',0.78));
+    }
+  }
+  return pieces;
+}
+function shuffleArray(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  const isIdentity = a.every((v,i)=>v===i);
+  if(isIdentity && a.length>1){ [a[0],a[1]] = [a[1],a[0]]; }
+  return a;
+}
+
+let puzzleState = null;
+function openPuzzleFromAny(id){
+  const inEditor = document.getElementById('screen-editor').classList.contains('active');
+  openPuzzle(id, !inEditor);
+}
+function openPuzzle(elId, fromBook){
+  const list = fromBook ? (pages[currentIndex] ? pages[currentIndex].elements : []) : (editingPage ? editingPage.elements : []);
+  const el = list.find(e=>e.id===elId);
+  if(!el) return;
+  puzzleState = {elId, grid:el.grid, pieces:el.pieces, order: el.order.slice(), fromBook};
+  document.getElementById('puzzleSolvedBanner').style.display='none';
+  renderPuzzleBoard();
+  document.getElementById('puzzleOverlay').classList.add('open');
+}
+function renderPuzzleBoard(){
+  const board = document.getElementById('puzzleBoard');
+  board.innerHTML='';
+  const n = puzzleState.grid;
+  const cellPct = 100/n;
+  puzzleState.order.forEach((pieceIdx, slotIdx)=>{
+    const row = Math.floor(slotIdx/n), col = slotIdx%n;
+    const piece = document.createElement('div');
+    piece.className='puzzle-piece';
+    piece.style.width=cellPct+'%'; piece.style.height=cellPct+'%';
+    piece.style.left=(col*cellPct)+'%'; piece.style.top=(row*cellPct)+'%';
+    piece.style.backgroundImage = `url(${puzzleState.pieces[pieceIdx]})`;
+    piece.dataset.slot = slotIdx;
+    attachPuzzleDrag(piece);
+    board.appendChild(piece);
+  });
+  const solved = puzzleState.order.every((v,i)=>v===i);
+  document.getElementById('puzzleSolvedBanner').style.display = solved ? 'flex' : 'none';
+}
+function attachPuzzleDrag(piece){
+  let startX=0,startY=0, dragging=false;
+  piece.onpointerdown=(ev)=>{
+    ev.stopPropagation();
+    dragging=true; startX=ev.clientX; startY=ev.clientY;
+    piece.classList.add('dragging');
+    piece.style.zIndex=50;
+    piece.setPointerCapture && piece.setPointerCapture(ev.pointerId);
+  };
+  piece.onpointermove=(ev)=>{
+    if(!dragging) return;
+    const dx = ev.clientX-startX, dy = ev.clientY-startY;
+    piece.style.transform = `translate(${dx}px,${dy}px)`;
+  };
+  piece.onpointerup=(ev)=>{
+    if(!dragging) return;
+    dragging=false;
+    piece.classList.remove('dragging');
+    piece.style.transform='';
+    const board = document.getElementById('puzzleBoard');
+    const boardRect = board.getBoundingClientRect();
+    const n = puzzleState.grid;
+    const relX = (ev.clientX - boardRect.left)/boardRect.width;
+    const relY = (ev.clientY - boardRect.top)/boardRect.height;
+    let col = Math.floor(relX*n), row = Math.floor(relY*n);
+    col = Math.max(0, Math.min(n-1, col));
+    row = Math.max(0, Math.min(n-1, row));
+    const targetSlot = row*n+col;
+    const sourceSlot = +piece.dataset.slot;
+    if(targetSlot!==sourceSlot){
+      const tmp = puzzleState.order[sourceSlot];
+      puzzleState.order[sourceSlot] = puzzleState.order[targetSlot];
+      puzzleState.order[targetSlot] = tmp;
+    }
+    renderPuzzleBoard();
+  };
+}
+function shufflePuzzle(){
+  if(!puzzleState) return;
+  puzzleState.order = shuffleArray(puzzleState.order);
+  renderPuzzleBoard();
+}
+function closePuzzleOverlay(){
+  if(puzzleState){
+    const list = puzzleState.fromBook ? pages[currentIndex].elements : editingPage.elements;
+    const el = list.find(e=>e.id===puzzleState.elId);
+    if(el){
+      el.order = puzzleState.order.slice();
+      el.solved = el.order.every((v,i)=>v===i);
+    }
+    if(puzzleState.fromBook){ savePages(); renderBook(); }
+    else { renderEditorCanvas(); }
+  }
+  document.getElementById('puzzleOverlay').classList.remove('open');
+  puzzleState = null;
+}
+
+function toggleSubpanel(id){
+  const isOpen = document.getElementById(id).classList.contains('open');
+  closeAllSubpanels();
+  if(!isOpen) document.getElementById(id).classList.add('open');
+}
+function closeAllSubpanels(){ document.querySelectorAll('.subpanel').forEach(p=>p.classList.remove('open')); }
+
+/* ---- drag / resize / rotate elements ---- */
+function makeDraggable(node, elData){
+  let dragging=false, startX=0,startY=0, origX=elData.x, origY=elData.y;
+  node.onpointerdown=(ev)=>{
+    ev.stopPropagation();
+    selectElement(elData.id);
+    if(ev.target.classList.contains('resize-handle')) return;
+    dragging=true; startX=ev.clientX; startY=ev.clientY; origX=elData.x; origY=elData.y;
+    node.setPointerCapture && node.setPointerCapture(ev.pointerId);
+  };
+  node.onpointermove=(ev)=>{
+    if(!dragging) return;
+    const canvasRect = document.getElementById('editorCanvas').getBoundingClientRect();
+    const dx = (ev.clientX-startX)/canvasRect.width*100;
+    const dy = (ev.clientY-startY)/canvasRect.height*100;
+    elData.x = Math.max(0,Math.min(100, origX+dx));
+    elData.y = Math.max(0,Math.min(100, origY+dy));
+    node.style.left=elData.x+'%'; node.style.top=elData.y+'%';
+  };
+  node.onpointerup=()=>{ dragging=false; };
+
+  if(elData.type==='text'){
+    node.ondblclick=()=>startTextEdit(elData.id);
+  }
+}
+function selectElement(id){
+  selectedElId=id;
+  document.querySelectorAll('#editorLayer .canvas-el').forEach(n=>{
+    n.classList.remove('selected-el');
+    const h=n.querySelector('.resize-handle'); if(h) h.remove();
+    const t=n.parentElement.querySelector('.sel-toolbar'); if(t) t.remove();
+  });
+  const node = document.querySelector(`#editorLayer [data-id="${id}"]`);
+  if(!node) return;
+  node.classList.add('selected-el');
+  const handle=document.createElement('div');
+  handle.className='resize-handle';
+  node.appendChild(handle);
+  attachResize(handle, node, getEl(id));
+
+  const toolbar=document.createElement('div');
+  toolbar.className='sel-toolbar';
+  toolbar.style.left=node.style.left; toolbar.style.top=node.style.top;
+  toolbar.innerHTML = `<div class="sel-mini-btn" onclick="deleteSelected()">🗑</div><div class="sel-mini-btn" onclick="bringForward()">⬆</div>`;
+  document.getElementById('editorLayer').appendChild(toolbar);
+}
+function deselectAll(){
+  selectedElId=null;
+  document.querySelectorAll('#editorLayer .canvas-el').forEach(n=>{
+    n.classList.remove('selected-el');
+    const h=n.querySelector('.resize-handle'); if(h) h.remove();
+  });
+  document.querySelectorAll('.sel-toolbar').forEach(t=>t.remove());
+}
+function getEl(id){ return editingPage.elements.find(e=>e.id===id); }
+function deleteSelected(){
+  if(!selectedElId) return;
+  editingPage.elements = editingPage.elements.filter(e=>e.id!==selectedElId);
+  selectedElId=null;
+  renderEditorCanvas();
+}
+function bringForward(){
+  const el=getEl(selectedElId); if(!el) return;
+  el.z = Math.max(...editingPage.elements.map(e=>e.z||1))+1;
+  renderEditorCanvas(); selectElement(el.id);
+}
+function attachResize(handle, node, elData){
+  let active=false, centerX=0, centerY=0, startDist=1, startAngle=0, startW=elData.w, startH=elData.h, startRot=elData.rot||0;
+  handle.onpointerdown=(ev)=>{
+    ev.stopPropagation();
+    active=true;
+    const r = node.getBoundingClientRect();
+    centerX = r.left + r.width/2; centerY = r.top + r.height/2;
+    startDist = Math.max(8, Math.hypot(ev.clientX-centerX, ev.clientY-centerY));
+    startAngle = Math.atan2(ev.clientY-centerY, ev.clientX-centerX);
+    startW=elData.w; startH=elData.h; startRot=elData.rot||0;
+    handle.setPointerCapture && handle.setPointerCapture(ev.pointerId);
+  };
+  handle.onpointermove=(ev)=>{
+    if(!active) return;
+    const dist = Math.max(8, Math.hypot(ev.clientX-centerX, ev.clientY-centerY));
+    const angle = Math.atan2(ev.clientY-centerY, ev.clientX-centerX);
+    const scaleFactor = dist/startDist;
+    let deltaDeg = (angle-startAngle)*180/Math.PI;
+    elData.w = Math.max(6, Math.min(98, startW*scaleFactor));
+    elData.h = Math.max(6, Math.min(98, startH*scaleFactor));
+    elData.rot = startRot + deltaDeg;
+    node.style.width=elData.w+'%'; node.style.height=elData.h+'%';
+    node.style.transform = `translate(-50%,-50%) rotate(${elData.rot}deg)`;
+  };
+  handle.onpointerup=()=>{ active=false; };
+}
+let textEditId=null;
+function startTextEdit(id){
+  const el=getEl(id); if(!el) return;
+  textEditId=id;
+  selectElement(id);
+  closeAllSubpanels();
+  document.getElementById('textEditArea').value = el.text||'';
+  document.getElementById('textSizeRange').value = el.fontSize||22;
+  document.getElementById('panel-textedit').classList.add('open');
+  setTimeout(()=>{
+    const ta=document.getElementById('textEditArea');
+    ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length);
+  },280);
+}
+function onTextEditInput(){
+  if(!textEditId) return;
+  const el=getEl(textEditId); if(!el) return;
+  el.text = document.getElementById('textEditArea').value;
+  updateTextNode(el);
+}
+function onTextSizeInput(){
+  if(!textEditId) return;
+  const el=getEl(textEditId); if(!el) return;
+  el.fontSize = +document.getElementById('textSizeRange').value;
+  updateTextNode(el);
+}
+function setTextColor(c){
+  if(!textEditId) return;
+  const el=getEl(textEditId); if(!el) return;
+  el.color = c;
+  updateTextNode(el);
+}
+function updateTextNode(el){
+  const node = document.querySelector(`#editorLayer [data-id="${el.id}"] .el-text`);
+  if(node){
+    node.textContent = el.text||'';
+    node.style.fontSize = (el.fontSize||22)+'px';
+    node.style.color = el.color||'#5a3744';
+  }
+}
+function closeTextEdit(){
+  textEditId=null;
+  closeAllSubpanels();
+}
+
+/* ---- save / close editor ---- */
+function closeEditor(save){
+  const liveCv = document.getElementById('liveDrawCanvas');
+  if(liveCv && liveCv.style.display==='block') exitLiveDraw(false);
+  closeAllSubpanels();
+  deselectAll();
+  if(save){
+    if(!editingPage.title || !editingPage.title.trim()){
+      editingPage.title = document.getElementById('metaTitle').value.trim();
+    }
+    editingPage.title = document.getElementById('metaTitle').value.trim() || editingPage.title;
+    editingPage.date = document.getElementById('metaDate').value || editingPage.date;
+    if(editingIsNew){ pages.push(editingPage); currentIndex = pages.length-1; }
+    else { pages[currentIndex] = editingPage; }
+    savePages();
+    showScreen('screen-book');
+    renderBook();
+    showToast('Page saved 🌸');
+  } else {
+    showScreen('screen-book');
+    renderBook();
+  }
+  editingPage=null;
+}
+
+/* ============================================================
+   LIVE DRAW MODE — draws directly over the current page
+============================================================ */
+let liveDctx, liveDrawing=false, liveColor='#3a2a2a', liveTool='brush', liveSize=4;
+let liveHistory=[], liveRedoStack=[];
+
+function enterDraw(){
+  closeAllSubpanels();
+  deselectAll();
+  const canvasBox = document.getElementById('editorCanvas');
+  const cv = document.getElementById('liveDrawCanvas');
+  let rect = canvasBox.getBoundingClientRect();
+  if(rect.width<10 || rect.height<10){
+    const wrap = document.querySelector('.editor-canvas-wrap');
+    rect = { width: wrap.clientWidth || 300, height: wrap.clientHeight || 400 };
+  }
+  cv.style.display='block';
+  cv.style.width = rect.width+'px';
+  cv.style.height = rect.height+'px';
+  cv.width = Math.round(rect.width*2);
+  cv.height = Math.round(rect.height*2);
+  liveDctx = cv.getContext('2d');
+  liveDctx.scale(2,2);
+  liveDctx.lineCap='round'; liveDctx.lineJoin='round';
+  liveHistory=[cv.toDataURL()]; liveRedoStack=[];
+  attachLiveDrawEvents(cv);
+  document.getElementById('editorToolbar').style.display='none';
+  document.getElementById('drawModeBar').style.display='flex';
+}
+function attachLiveDrawEvents(cv){
+  let lastX=0,lastY=0;
+  cv.onpointerdown=(e)=>{
+    liveDrawing=true;
+    cv.setPointerCapture && cv.setPointerCapture(e.pointerId);
+    const r=cv.getBoundingClientRect();
+    lastX=e.clientX-r.left; lastY=e.clientY-r.top;
+  };
+  cv.onpointermove=(e)=>{
+    if(!liveDrawing) return;
+    const r=cv.getBoundingClientRect();
+    const x=e.clientX-r.left, y=e.clientY-r.top;
+    liveDctx.globalCompositeOperation = liveTool==='eraser' ? 'destination-out' : 'source-over';
+    liveDctx.strokeStyle = liveColor;
+    liveDctx.lineWidth = liveSize;
+    liveDctx.beginPath(); liveDctx.moveTo(lastX,lastY); liveDctx.lineTo(x,y); liveDctx.stroke();
+    lastX=x; lastY=y;
+  };
+  cv.onpointerup=(e)=>{
+    if(liveDrawing){ liveHistory.push(cv.toDataURL()); liveRedoStack=[]; }
+    liveDrawing=false;
+    cv.releasePointerCapture && e.pointerId!=null && cv.hasPointerCapture && cv.hasPointerCapture(e.pointerId) && cv.releasePointerCapture(e.pointerId);
+  };
+  cv.onpointercancel=()=>{ liveDrawing=false; };
+}
+function setLiveDrawColor(c){ liveColor=c; liveTool='brush'; updateLiveDrawToolUI(); }
+function setLiveDrawTool(t){ liveTool=t; updateLiveDrawToolUI(); }
+function updateLiveDrawToolUI(){
+  document.getElementById('liveBrushBtn').classList.toggle('active', liveTool==='brush');
+  document.getElementById('liveEraserBtn').classList.toggle('active', liveTool==='eraser');
+}
+function liveDrawUndo(){
+  if(liveHistory.length<=1) return;
+  liveRedoStack.push(liveHistory.pop());
+  restoreLiveDraw(liveHistory[liveHistory.length-1]);
+}
+function liveDrawRedo(){
+  if(liveRedoStack.length===0) return;
+  const img = liveRedoStack.pop();
+  liveHistory.push(img);
+  restoreLiveDraw(img);
+}
+function restoreLiveDraw(dataUrl){
+  const cv=document.getElementById('liveDrawCanvas');
+  const img=new Image();
+  img.onload=()=>{ liveDctx.clearRect(0,0,cv.width,cv.height); liveDctx.drawImage(img,0,0,cv.width/2,cv.height/2); };
+  img.src=dataUrl;
+}
+function exitLiveDraw(save){
+  const cv=document.getElementById('liveDrawCanvas');
+  if(save && liveHistory.length>1){
+    const dataUrl = cv.toDataURL('image/png');
+    addElement({type:'drawing', x:50,y:50,w:100,h:100, rot:0, src:dataUrl});
+    showToast('Drawing added over the page 🖌️');
+  }
+  liveDctx && liveDctx.clearRect(0,0,cv.width,cv.height);
+  cv.style.display='none';
+  document.getElementById('editorToolbar').style.display='flex';
+  document.getElementById('drawModeBar').style.display='none';
+}
+document.addEventListener('DOMContentLoaded', ()=>{
+  const sizeInput = document.getElementById('liveDrawSize');
+  if(sizeInput) sizeInput.oninput = (e)=>{ liveSize=+e.target.value; };
+});
+
+/* ============================================================
+   SEARCH
+============================================================ */
+function openSearch(){
+  showScreen('screen-search');
+  document.getElementById('searchInput').value='';
+  renderSearchResults();
+  setTimeout(()=>document.getElementById('searchInput').focus(),200);
+}
+function closeSearch(){ showScreen('screen-book'); renderBook(); }
+function renderSearchResults(){
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  const results = document.getElementById('searchResults');
+  const matches = pages.map((p,i)=>({p,i})).filter(({p})=> !q || (p.title||'').toLowerCase().includes(q));
+  if(matches.length===0){
+    results.innerHTML = `<div class="search-empty">No pages found yet 🌷<br>Try a different word.</div>`;
+    return;
+  }
+  results.innerHTML = matches.map(({p,i})=>`
+    <div class="search-result-item" onclick="flipToPage(${i})">
+      <div class="sri-thumb ${bgClass(p.bg)}" style="background:${p.bg==='burgundy'?'#5e2236':p.bg==='blush'?'#f1c9d2':p.bg==='kraft'?'#d9c79f':'#f5e7d2'};">📖</div>
+      <div class="sri-text">
+        <div class="sri-title">${p.title||'Untitled page'}</div>
+        <div class="sri-date">${p.date||''}</div>
+      </div>
+    </div>`).join('');
+}
+
+/* ============================================================
+   SETTINGS
+============================================================ */
+async function resetBook(){
+  if(!confirm('Erase every page in this book? This cannot be undone.')) return;
+  pages=[]; currentIndex=0;
+  await savePages();
+  showToast('Book reset 🌱');
+  goCover();
+}
+
+/* ============================================================
+   LONG-PRESS ON BOOK PAGE TO EDIT
+============================================================ */
+document.getElementById('bookStage').addEventListener('dblclick', ()=>{ editCurrentPage(); });
+
+/* ============================================================
+   INIT
+============================================================ */
+(async function init(){
+  await loadPages();
+  renderBook();
+})();
+</script>
+</body>
+</html>
