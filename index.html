@@ -503,6 +503,18 @@ input,textarea{font-family:inherit;}
 
 .hidden-file-input{ display:none; }
 
+/* ---- upload progress ---- */
+.upload-progress-wrap{
+  margin-top:10px; background:#f3e3e8; border-radius:20px; height:10px; overflow:hidden; display:none;
+}
+.upload-progress-wrap.show{ display:block; }
+.upload-progress-bar{
+  height:100%; width:0%; border-radius:20px;
+  background: linear-gradient(160deg,#f1aebb,#d9778c);
+  transition: width .15s ease;
+}
+.upload-progress-label{ font-size:11px; color:#9a7d86; margin-top:4px; text-align:center; }
+
 /* ---- lock screen ---- */
 #screen-lock{ background: linear-gradient(160deg,#4a2c1f,#6b4530); align-items:center; justify-content:center; }
 .lock-card{
@@ -635,16 +647,20 @@ input,textarea{font-family:inherit;}
     <!-- subpanels -->
     <div class="subpanel" id="panel-photo">
       <div class="subpanel-header"><h4>Add a photo</h4><button class="subpanel-close" onclick="closeAllSubpanels()">✕</button></div>
-      <button class="editor-save-btn" onclick="closeAllSubpanels(); document.getElementById('photoInput').click();">Choose photo</button>
+      <button class="editor-save-btn" id="photoChooseBtn" onclick="document.getElementById('photoInput').click();">Choose photo</button>
       <input class="hidden-file-input" type="file" id="photoInput" accept="image/*" onchange="handlePhotoUpload(event)">
+      <div class="upload-progress-wrap" id="photoProgressWrap"><div class="upload-progress-bar" id="photoProgressBar"></div></div>
+      <div class="upload-progress-label" id="photoProgressLabel"></div>
     </div>
     <div class="subpanel" id="panel-media">
       <div class="subpanel-header"><h4>Add a song or video</h4><button class="subpanel-close" onclick="closeAllSubpanels()">✕</button></div>
-      <button class="editor-save-btn" onclick="closeAllSubpanels(); document.getElementById('audioInput').click();">Choose song</button>
+      <button class="editor-save-btn" id="audioChooseBtn" onclick="document.getElementById('audioInput').click();">Choose song</button>
       <input class="hidden-file-input" type="file" id="audioInput" accept="audio/*" onchange="handleAudioUpload(event)">
-      <p style="font-size:11px;color:#9a7d86;margin-top:10px;">Songs up to ~10MB and videos up to ~12MB are saved permanently with the page. Bigger files will only play during this visit.</p>
-      <button class="editor-save-btn" style="margin-top:6px;" onclick="closeAllSubpanels(); document.getElementById('videoInput').click();">Choose video</button>
+      <p style="font-size:11px;color:#9a7d86;margin-top:10px;">Songs and videos upload to your synced storage and stay available on every device. Without a sync server they're saved on this device only, with a smaller size limit.</p>
+      <button class="editor-save-btn" id="videoChooseBtn" style="margin-top:6px;" onclick="document.getElementById('videoInput').click();">Choose video</button>
       <input class="hidden-file-input" type="file" id="videoInput" accept="video/*" onchange="handleVideoUpload(event)">
+      <div class="upload-progress-wrap" id="mediaProgressWrap"><div class="upload-progress-bar" id="mediaProgressBar"></div></div>
+      <div class="upload-progress-label" id="mediaProgressLabel"></div>
     </div>
     <div class="subpanel" id="panel-sticker">
       <div class="subpanel-header"><h4>Stickers</h4><button class="subpanel-close" onclick="closeAllSubpanels()">✕</button></div>
@@ -655,7 +671,7 @@ input,textarea{font-family:inherit;}
           <button class="font-opt" id="stickerSize120" onclick="setCustomStickerSize(120)" style="background:var(--rose-deep);color:#fff;">Medium</button>
           <button class="font-opt" id="stickerSize220" onclick="setCustomStickerSize(220)">Large</button>
         </div>
-        <button class="editor-save-btn" onclick="closeAllSubpanels(); document.getElementById('customStickerInput').click(); setTimeout(()=>document.getElementById('panel-sticker').classList.add('open'),0);">Choose photo for sticker</button>
+        <button class="editor-save-btn" onclick="document.getElementById('customStickerInput').click();">Choose photo for sticker</button>
         <input class="hidden-file-input" type="file" id="customStickerInput" accept="image/*" onchange="handleCustomStickerUpload(event)">
         <div class="custom-sticker-row" id="customStickerRow"></div>
       </div>
@@ -763,8 +779,10 @@ input,textarea{font-family:inherit;}
         <button class="font-opt" id="puzzleGrid4" onclick="setPuzzleGridChoice(4)">4 × 4</button>
         <button class="font-opt" id="puzzleGrid5" onclick="setPuzzleGridChoice(5)">5 × 5</button>
       </div>
-      <button class="editor-save-btn" onclick="closeAllSubpanels(); document.getElementById('puzzleInput').click();">Choose photo</button>
+      <button class="editor-save-btn" onclick="document.getElementById('puzzleInput').click();">Choose photo</button>
       <input class="hidden-file-input" type="file" id="puzzleInput" accept="image/*" onchange="handlePuzzlePhoto(event)">
+      <div class="upload-progress-wrap" id="puzzleProgressWrap"><div class="upload-progress-bar" id="puzzleProgressBar"></div></div>
+      <div class="upload-progress-label" id="puzzleProgressLabel"></div>
     </div>
     <div class="subpanel" id="panel-textedit">
       <div class="subpanel-header"><h4>Edit text</h4><button class="subpanel-close" onclick="closeTextEdit()">✕</button></div>
@@ -838,6 +856,7 @@ input,textarea{font-family:inherit;}
       <p>Connect this book to a free online database (Firebase) so every device using the same link sees the same pages. Paste your database link below — see the guide for the 5-minute free setup.</p>
       <input id="syncUrlInput" placeholder="https://your-project-default-rtdb.firebaseio.com/pages.json" style="width:100%;padding:9px 12px;border-radius:10px;border:1px solid #eed7dd;margin-bottom:8px;font-size:13px;">
       <input id="syncKeyInput" placeholder="Optional auth key (leave blank for Firebase test mode)" style="width:100%;padding:9px 12px;border-radius:10px;border:1px solid #eed7dd;margin-bottom:10px;font-size:13px;">
+      <input id="storageBucketInput" placeholder="Optional Storage bucket (e.g. your-project.appspot.com)" style="width:100%;padding:9px 12px;border-radius:10px;border:1px solid #eed7dd;margin-bottom:10px;font-size:13px;">
       <div style="display:flex;gap:8px;">
         <button class="editor-save-btn" style="flex:1;text-align:center;" onclick="saveSyncSettings()">Save</button>
         <button class="editor-save-btn" style="flex:1;text-align:center;background:#f3e3e8;color:var(--rose-darker);" onclick="syncNow()">Sync now</button>
@@ -858,30 +877,122 @@ input,textarea{font-family:inherit;}
 /* ============================================================
    STATE
 ============================================================ */
-let pages = [];          // {id,title,date,bg,elements:[]}
+let pages = [];          // {id,title,date,bg,elements:[],updatedAt,order}
 let currentIndex = 0;
 let editingPage = null;  // working copy while in editor
 let editingIsNew = false;
 let selectedElId = null;
 let storageReady = false;
 
-const STORAGE_KEY = 'olm-pages-v1';
-
 function uid(){ return 'id'+Math.random().toString(36).slice(2,10)+Date.now().toString(36); }
+function nowTs(){ return Date.now(); }
 
 /* ============================================================
-   PERSISTENCE — always saves to this browser's localStorage.
-   If a sync URL is configured (Settings screen), it also
-   pushes/pulls pages from there so every device using the same
-   link sees the same book. Works two ways:
-   - Firebase Realtime Database URL (free, no server to run) —
-     auto-detected, just GET/PUT raw JSON.
-   - A custom server (like the Termux one) — GET/POST /pages
-     with an X-Book-Key header.
+   LOCAL STORAGE LAYER
+   Each page is stored under its own key (olm-page-<id>) plus a
+   tiny index of ids in display order. This means saving or
+   editing ONE page only ever serializes that ONE page — never
+   the whole book — so the UI never freezes no matter how many
+   pages or how much media the book has.
+============================================================ */
+const PAGE_INDEX_KEY = 'olm-page-index-v1';
+const PAGE_KEY_PREFIX = 'olm-page-';
+const TOMBSTONES_KEY = 'olm-tombstones-v1';
+const DIRTY_KEY = 'olm-dirty-ids-v1';
+const LEGACY_STORAGE_KEY = 'olm-pages-v1';
+
+function readJSON(key, fallback){
+  try{ const raw = localStorage.getItem(key); return raw===null ? fallback : JSON.parse(raw); }
+  catch(e){ return fallback; }
+}
+function writeJSON(key, value){
+  try{ localStorage.setItem(key, JSON.stringify(value)); return true; }
+  catch(e){ showToast('Could not save — your photos/videos may be too large for this browser\'s storage.'); return false; }
+}
+function loadLocalPageIndex(){ return readJSON(PAGE_INDEX_KEY, null); }
+function saveLocalPageIndex(ids){ writeJSON(PAGE_INDEX_KEY, ids); }
+function loadLocalPage(id){ return readJSON(PAGE_KEY_PREFIX+id, null); }
+function saveLocalPage(page){ writeJSON(PAGE_KEY_PREFIX+page.id, page); }
+function deleteLocalPage(id){ try{ localStorage.removeItem(PAGE_KEY_PREFIX+id); }catch(e){} }
+
+function persistSinglePageLocally(page){
+  saveLocalPage(page);
+  const ids = loadLocalPageIndex() || [];
+  if(!ids.includes(page.id)){ ids.push(page.id); saveLocalPageIndex(ids); }
+}
+function removeSinglePageLocally(id){
+  deleteLocalPage(id);
+  const ids = (loadLocalPageIndex()||[]).filter(x=>x!==id);
+  saveLocalPageIndex(ids);
+}
+
+function loadTombstones(){ return readJSON(TOMBSTONES_KEY, {}); }
+function saveTombstones(t){ writeJSON(TOMBSTONES_KEY, t); }
+function addTombstone(id, updatedAt){
+  const t = loadTombstones();
+  t[id] = Math.max(t[id]||0, updatedAt);
+  saveTombstones(t);
+}
+
+function loadDirtyIds(){ return new Set(readJSON(DIRTY_KEY, [])); }
+function saveDirtyIds(set){ writeJSON(DIRTY_KEY, Array.from(set)); }
+function markDirty(id){ const s=loadDirtyIds(); s.add(id); saveDirtyIds(s); }
+function clearDirty(ids){ const s=loadDirtyIds(); ids.forEach(id=>s.delete(id)); saveDirtyIds(s); }
+
+function migrateLegacyStorageIfNeeded(){
+  if(loadLocalPageIndex() !== null) return; // already on the new format
+  const raw = readJSON(LEGACY_STORAGE_KEY, null);
+  if(!Array.isArray(raw)){ saveLocalPageIndex([]); return; }
+  const ts = nowTs();
+  const ids = [];
+  raw.forEach((p,i)=>{
+    if(!p || !p.id) return;
+    if(!p.updatedAt) p.updatedAt = ts;
+    if(p.order===undefined || p.order===null) p.order = ts+i;
+    saveLocalPage(p);
+    ids.push(p.id);
+  });
+  saveLocalPageIndex(ids);
+  try{ localStorage.removeItem(LEGACY_STORAGE_KEY); }catch(e){}
+}
+
+function readAllLocalPages(){
+  migrateLegacyStorageIfNeeded();
+  const ids = loadLocalPageIndex() || [];
+  const list = [];
+  ids.forEach(id=>{ const p = loadLocalPage(id); if(p) list.push(p); });
+  list.sort((a,b)=>(a.order||0)-(b.order||0));
+  return list;
+}
+function writeAllLocalPages(list){
+  const oldIds = new Set(loadLocalPageIndex() || []);
+  const newIds = [];
+  list.forEach(p=>{ saveLocalPage(p); newIds.push(p.id); oldIds.delete(p.id); });
+  oldIds.forEach(id=>deleteLocalPage(id));
+  saveLocalPageIndex(newIds);
+}
+
+/* ============================================================
+   SYNC LAYER — Firebase Realtime Database REST API.
+   Pages live as a MAP keyed by id: { pageId: {...page} }.
+   - Reads use plain GET (no data is ever lost by reading).
+   - Writes use PATCH with only the changed page ids, which
+     Firebase applies as a multi-location update: every key in
+     the PATCH body is written, every key NOT mentioned is left
+     completely untouched. This is what stops one device's save
+     from erasing another device's pages.
+   - Conflicts between devices are resolved per-page by
+     `updatedAt` (last write wins, the newer edit survives).
+   - Deletions are tombstones ({deleted:true, updatedAt}) instead
+     of removing keys, so a page is only ever removed because a
+     person explicitly deleted it — never because of a dropped
+     connection, a partial sync, or a race between two devices.
 ============================================================ */
 const SYNC_URL_KEY = 'olm-sync-url';
 const SYNC_KEY_KEY = 'olm-sync-key';
+const STORAGE_BUCKET_KEY = 'olm-storage-bucket';
 const DEFAULT_SYNC_URL = 'https://our-little-memories-4f5c9-default-rtdb.firebaseio.com/pages.json';
+
 function getSyncConfig(){
   let url = localStorage.getItem(SYNC_URL_KEY);
   if(url === null){
@@ -893,68 +1004,154 @@ function getSyncConfig(){
     key: (localStorage.getItem(SYNC_KEY_KEY)||'').trim()
   };
 }
-function isFirebaseUrl(url){
-  return /firebaseio\.com|firebasedatabase\.app/.test(url);
+function isFirebaseUrl(url){ return /firebaseio\.com|firebasedatabase\.app/.test(url); }
+function getStorageBucket(){
+  const explicit = (localStorage.getItem(STORAGE_BUCKET_KEY)||'').trim();
+  if(explicit) return explicit;
+  const { url } = getSyncConfig();
+  const m = url.match(/^https?:\/\/([a-z0-9-]+)-default-rtdb\./i);
+  return m ? (m[1]+'.appspot.com') : '';
 }
-async function fetchServerPages(url, key){
+
+function fetchWithTimeout(url, options, ms){
+  const ctrl = new AbortController();
+  const timer = setTimeout(()=>ctrl.abort(), ms||12000);
+  return fetch(url, Object.assign({}, options, { signal: ctrl.signal }))
+    .finally(()=>clearTimeout(timer));
+}
+function firebaseAuthSuffix(url, key){
+  return key ? (url + (url.includes('?')?'&':'?') + 'auth='+encodeURIComponent(key)) : url;
+}
+
+/* GET — returns a map {id: pageOrTombstone}; never mutates the server. */
+async function fetchServerPageMap(url, key){
   if(isFirebaseUrl(url)){
-    const finalUrl = key ? (url + (url.includes('?')?'&':'?') + 'auth='+encodeURIComponent(key)) : url;
-    const res = await fetch(finalUrl);
-    if(!res.ok) throw new Error('network error');
+    const res = await fetchWithTimeout(firebaseAuthSuffix(url, key), {}, 12000);
+    if(!res.ok) throw new Error('network error '+res.status);
     const data = await res.json();
-    if(Array.isArray(data)) return data;
-    if(data && Array.isArray(data.pages)) return data.pages;
-    return [];
+    if(!data) return {};
+    if(Array.isArray(data)){
+      const map={}; data.forEach((p,i)=>{ if(p&&p.id) map[p.id]=Object.assign({order:i,updatedAt:p.updatedAt||0}, p); });
+      return map;
+    }
+    if(data.pages && Array.isArray(data.pages)){
+      const map={}; data.pages.forEach((p,i)=>{ if(p&&p.id) map[p.id]=Object.assign({order:i,updatedAt:p.updatedAt||0}, p); });
+      return map;
+    }
+    return (typeof data==='object') ? data : {};
   } else {
-    const res = await fetch(url.replace(/\/$/,'')+'/pages', { headers: { 'X-Book-Key': key } });
+    const res = await fetchWithTimeout(url.replace(/\/$/,'')+'/pages', { headers:{'X-Book-Key':key} }, 12000);
     if(!res.ok) throw new Error('network or auth error');
     const data = await res.json();
-    return (data && Array.isArray(data.pages)) ? data.pages : [];
+    const map={};
+    (data && Array.isArray(data.pages) ? data.pages : []).forEach((p,i)=>{ if(p&&p.id) map[p.id]=Object.assign({order:i,updatedAt:p.updatedAt||0}, p); });
+    return map;
   }
 }
-async function pushServerPages(url, key, pagesArr){
+/* PATCH — writes ONLY the ids present in patchMap. Every other page already
+   on the server is left exactly as it is — no full overwrite, ever. */
+async function patchServerPages(url, key, patchMap){
+  if(!patchMap || Object.keys(patchMap).length===0) return;
   if(isFirebaseUrl(url)){
-    const finalUrl = key ? (url + (url.includes('?')?'&':'?') + 'auth='+encodeURIComponent(key)) : url;
-    await fetch(finalUrl, { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(pagesArr) });
+    const res = await fetchWithTimeout(firebaseAuthSuffix(url, key), {
+      method:'PATCH', headers:{'Content-Type':'application/json'}, body: JSON.stringify(patchMap)
+    }, 15000);
+    if(!res.ok) throw new Error('write failed '+res.status);
   } else {
-    await fetch(url.replace(/\/$/,'')+'/pages', {
-      method:'POST',
-      headers: { 'Content-Type':'application/json', 'X-Book-Key': key },
-      body: JSON.stringify({ pages: pagesArr })
-    });
+    const res = await fetchWithTimeout(url.replace(/\/$/,'')+'/pages', {
+      method:'POST', headers:{'Content-Type':'application/json','X-Book-Key':key},
+      body: JSON.stringify({ patch: patchMap })
+    }, 15000);
+    if(!res.ok) throw new Error('write failed '+res.status);
   }
 }
+
+function mergeWinner(localPage, serverRecord){
+  if(!serverRecord) return localPage;
+  if(!localPage) return serverRecord;
+  return (serverRecord.updatedAt||0) > (localPage.updatedAt||0) ? serverRecord : localPage;
+}
+
+/* Merge server data into local state. Never deletes a page just because
+   it's missing on the server (that could mean it's new/unsynced on this
+   device) — only a tombstone (explicit delete) removes a page. */
+function mergeFromServer(serverMap){
+  const tombstones = loadTombstones();
+  const localById = new Map(pages.map(p=>[p.id,p]));
+  const allIds = new Set([...localById.keys(), ...Object.keys(serverMap||{})]);
+  const merged = [];
+  allIds.forEach(id=>{
+    const local = localById.get(id) || null;
+    const server = (serverMap||{})[id] || null;
+    const winner = mergeWinner(local, server);
+    if(!winner) return;
+    const tombAt = tombstones[id]||0;
+    if(winner.deleted || tombAt > (winner.updatedAt||0)){
+      addTombstone(id, Math.max(winner.updatedAt||0, tombAt));
+      removeSinglePageLocally(id);
+      return;
+    }
+    merged.push(winner);
+  });
+  merged.sort((a,b)=>(a.order||0)-(b.order||0));
+  pages = merged;
+  writeAllLocalPages(pages);
+}
+
 async function loadPages(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if(raw){ pages = JSON.parse(raw); }
-  }catch(e){ pages = []; }
+  pages = readAllLocalPages();
   storageReady = true;
   const { url, key } = getSyncConfig();
-  if(url){
-    try{
-      const serverPages = await fetchServerPages(url, key);
-      if(Array.isArray(serverPages)){
-        pages = serverPages;
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(pages));
-      }
-    }catch(e){ /* server unreachable — keep using local copy */ }
-  }
+  if(!url) return;
+  try{
+    const serverMap = await fetchServerPageMap(url, key);
+    mergeFromServer(serverMap);
+  }catch(e){ /* offline or unreachable — local copy already loaded, nothing lost */ }
+  flushDirtyToServer();
 }
-async function savePages(){
-  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(pages)); }
-  catch(e){ showToast('Could not save — your photos/videos may be too large for this browser\'s storage.'); }
+
+let syncDebounceTimer = null;
+function scheduleBackgroundSync(){
+  clearTimeout(syncDebounceTimer);
+  syncDebounceTimer = setTimeout(flushDirtyToServer, 700);
+}
+async function flushDirtyToServer(){
   const { url, key } = getSyncConfig();
-  if(url){
-    try{ await pushServerPages(url, key, pages); }
-    catch(e){ /* server unreachable — local save above already happened */ }
-  }
+  if(!url) return;
+  const dirty = Array.from(loadDirtyIds());
+  const tombstones = loadTombstones();
+  const patch = {};
+  dirty.forEach(id=>{ const p = loadLocalPage(id); if(p) patch[id] = p; });
+  Object.keys(tombstones).forEach(id=>{
+    if(!patch[id]) patch[id] = { id, deleted:true, updatedAt: tombstones[id] };
+  });
+  if(Object.keys(patch).length===0) return;
+  try{
+    await patchServerPages(url, key, patch);
+    clearDirty(dirty);
+  }catch(e){ /* still queued locally — retried on next save or sync */ }
 }
+
+/* Persist one or more changed pages immediately (cheap, page-sized writes
+   only) and push to the server in the background without blocking the UI. */
+function savePages(changedIds){
+  const ids = (changedIds && changedIds.length) ? changedIds : pages.map(p=>p.id);
+  ids.forEach(id=>{
+    const p = pages.find(x=>x.id===id);
+    if(p){ persistSinglePageLocally(p); markDirty(id); }
+  });
+  saveLocalPageIndex(pages.map(p=>p.id));
+  scheduleBackgroundSync();
+}
+
 function saveSyncSettings(){
   const url = document.getElementById('syncUrlInput').value.trim();
   const key = document.getElementById('syncKeyInput').value.trim();
+  const bucket = document.getElementById('storageBucketInput').value.trim();
   localStorage.setItem(SYNC_URL_KEY, url);
   localStorage.setItem(SYNC_KEY_KEY, key);
+  if(bucket) localStorage.setItem(STORAGE_BUCKET_KEY, bucket);
+  else try{ localStorage.removeItem(STORAGE_BUCKET_KEY); }catch(e){}
   document.getElementById('syncStatus').textContent = url ? 'Saved. Tap "Sync now" to connect.' : 'Sync server cleared — this device will only save locally.';
 }
 async function syncNow(){
@@ -963,9 +1160,9 @@ async function syncNow(){
   const { url, key } = getSyncConfig();
   if(!url){ status.textContent = 'No sync link set yet.'; return; }
   try{
-    const serverPages = await fetchServerPages(url, key);
-    if(serverPages.length >= pages.length){ pages = serverPages; }
-    await savePages();
+    await flushDirtyToServer();
+    const serverMap = await fetchServerPageMap(url, key);
+    mergeFromServer(serverMap);
     status.textContent = 'Synced ✓ ('+pages.length+' page(s))';
     if(document.getElementById('screen-book').classList.contains('active')) renderBook();
   }catch(e){
@@ -1012,8 +1209,10 @@ function goSettings(){
   const { url, key } = getSyncConfig();
   const urlInput = document.getElementById('syncUrlInput');
   const keyInput = document.getElementById('syncKeyInput');
+  const bucketInput = document.getElementById('storageBucketInput');
   if(urlInput) urlInput.value = url;
   if(keyInput) keyInput.value = key;
+  if(bucketInput) bucketInput.value = localStorage.getItem(STORAGE_BUCKET_KEY) || '';
   const status = document.getElementById('syncStatus');
   if(status) status.textContent = url ? 'Sync server is set.' : '';
 }
@@ -1219,9 +1418,11 @@ function flipPrev(){ animateFlip(-1); }
 function deleteCurrentPage(){
   if(pages.length===0){ showToast('No page to delete 🌷'); return; }
   if(!confirm('Delete this page? This cannot be undone.')) return;
-  pages.splice(currentIndex,1);
+  const [removed] = pages.splice(currentIndex,1);
+  if(removed){ addTombstone(removed.id, nowTs()); removeSinglePageLocally(removed.id); }
   if(currentIndex>=pages.length) currentIndex = Math.max(0, pages.length-1);
-  savePages();
+  saveLocalPageIndex(pages.map(p=>p.id));
+  scheduleBackgroundSync();
   renderBook();
   showToast('Page deleted 🗑');
 }
@@ -1306,9 +1507,11 @@ function openEditorFor(page){
 function deleteEditingPage(){
   if(editingIsNew) return;
   if(!confirm('Permanently delete this page? This cannot be undone.')) return;
-  pages.splice(currentIndex,1);
+  const [removed] = pages.splice(currentIndex,1);
+  if(removed){ addTombstone(removed.id, nowTs()); removeSinglePageLocally(removed.id); }
   if(currentIndex>=pages.length) currentIndex = Math.max(0, pages.length-1);
-  savePages();
+  saveLocalPageIndex(pages.map(p=>p.id));
+  scheduleBackgroundSync();
   editingPage=null;
   showScreen('screen-book');
   renderBook();
@@ -1429,21 +1632,120 @@ function addPolaroid(){ document.getElementById('photoInput').dataset.frame='pol
 function setPageBg(bg){ editingPage.bg=bg; renderEditorCanvas(); closeAllSubpanels(); }
 function setPageFrame(kind){ editingPage.pageFrame = (kind==='none') ? null : kind; renderEditorCanvas(); closeAllSubpanels(); }
 
+/* ============================================================
+   UPLOADS — photos compress locally then upload to Firebase
+   Storage when a bucket is configured (Settings); video/audio
+   always upload to Storage (with a progress bar) so the real
+   Storage download URL — not a giant base64 blob — is what gets
+   saved on the page. Without a configured Storage bucket, small
+   files still work using the original on-device fallback so no
+   feature is lost when sync isn't set up.
+============================================================ */
+function setUploadProgress(prefix, ratio, label){
+  const wrap = document.getElementById(prefix+'ProgressWrap');
+  const bar = document.getElementById(prefix+'ProgressBar');
+  const lbl = document.getElementById(prefix+'ProgressLabel');
+  if(!wrap) return;
+  if(ratio===null || ratio===undefined){
+    wrap.classList.remove('show');
+    if(lbl) lbl.textContent='';
+    if(bar) bar.style.width='0%';
+    return;
+  }
+  wrap.classList.add('show');
+  if(bar) bar.style.width = Math.max(0,Math.min(100,Math.round(ratio*100)))+'%';
+  if(lbl) lbl.textContent = label || (Math.round(ratio*100)+'%');
+}
+function setBtnBusy(id, busy, busyLabel, idleLabel){
+  const btn = document.getElementById(id);
+  if(!btn) return;
+  btn.disabled = busy;
+  btn.style.opacity = busy ? '.6' : '';
+  btn.textContent = busy ? busyLabel : idleLabel;
+}
+
+/* Uploads a raw file/blob to Firebase Storage via its REST API and
+   resolves with a permanent https download URL. Reports 0..1 progress. */
+function uploadToFirebaseStorage(fileOrBlob, folder, filename, onProgress){
+  return new Promise((resolve, reject)=>{
+    const bucket = getStorageBucket();
+    if(!bucket){ reject(new Error('no-storage-bucket')); return; }
+    const { key } = getSyncConfig();
+    const safeName = (filename||'file').replace(/[^a-zA-Z0-9_.-]/g,'_');
+    const path = folder+'/'+nowTs().toString(36)+'_'+Math.random().toString(36).slice(2,8)+'_'+safeName;
+    let reqUrl = `https://firebasestorage.googleapis.com/v0/b/${encodeURIComponent(bucket)}/o?name=${encodeURIComponent(path)}&uploadType=media`;
+    if(key) reqUrl += '&auth='+encodeURIComponent(key);
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', reqUrl);
+    xhr.setRequestHeader('Content-Type', (fileOrBlob && fileOrBlob.type) || 'application/octet-stream');
+    xhr.timeout = 180000; // generous timeout for big videos on slow connections
+    if(xhr.upload && onProgress){
+      xhr.upload.onprogress = (ev)=>{ if(ev.lengthComputable) onProgress(ev.loaded/ev.total); };
+    }
+    xhr.onload = ()=>{
+      if(xhr.status>=200 && xhr.status<300){
+        try{
+          const res = JSON.parse(xhr.responseText);
+          const name = res.name || path;
+          const token = res.downloadTokens;
+          const url = `https://firebasestorage.googleapis.com/v0/b/${encodeURIComponent(bucket)}/o/${encodeURIComponent(name)}?alt=media`+(token?('&token='+token):'');
+          resolve(url);
+        }catch(err){ reject(err); }
+      } else {
+        reject(new Error('upload-failed-'+xhr.status));
+      }
+    };
+    xhr.onerror = ()=> reject(new Error('network-error'));
+    xhr.ontimeout = ()=> reject(new Error('timeout'));
+    xhr.send(fileOrBlob);
+  });
+}
+
 function handlePhotoUpload(e){
   const file = e.target.files[0]; if(!file) return;
   const frame = e.target.dataset.frame || 'square';
+  delete e.target.dataset.frame;
+  setBtnBusy('photoChooseBtn', true, 'Reading photo…', 'Choose photo');
+  setUploadProgress('photo', 0.05, 'Reading photo…');
   const reader = new FileReader();
   reader.onload = (ev)=>{
     const img = new Image();
-    img.onload = ()=>{
-      const dataUrl = compressImage(img, 700);
-      addElement({type:'image', x:50,y:40,w:50,h:36, rot:0, src:dataUrl, frame});
+    img.onload = async ()=>{
+      const dataUrl = compressImage(img, 1000);
+      const bucket = getStorageBucket();
+      if(bucket){
+        try{
+          setUploadProgress('photo', 0.15, 'Uploading…');
+          setBtnBusy('photoChooseBtn', true, 'Uploading…', 'Choose photo');
+          const blob = await (await fetch(dataUrl)).blob();
+          const url = await uploadToFirebaseStorage(blob, 'images', (file.name||'photo.jpg'), (r)=>setUploadProgress('photo', 0.15+r*0.8, Math.round(r*100)+'%'));
+          addElement({type:'image', x:50,y:40,w:50,h:36, rot:0, src:url, frame});
+          showToast('Photo added 🌸');
+        }catch(err){
+          addElement({type:'image', x:50,y:40,w:50,h:36, rot:0, src:dataUrl, frame});
+          showToast('Could not reach Storage — photo saved on this device only.');
+        }
+      } else {
+        addElement({type:'image', x:50,y:40,w:50,h:36, rot:0, src:dataUrl, frame});
+      }
+      setUploadProgress('photo', null);
+      setBtnBusy('photoChooseBtn', false, '', 'Choose photo');
       closeAllSubpanels();
+    };
+    img.onerror = ()=>{
+      setUploadProgress('photo', null);
+      setBtnBusy('photoChooseBtn', false, '', 'Choose photo');
+      showToast('Could not read that photo file.');
     };
     img.src = ev.target.result;
   };
+  reader.onerror = ()=>{
+    setUploadProgress('photo', null);
+    setBtnBusy('photoChooseBtn', false, '', 'Choose photo');
+    showToast('Could not read that photo file.');
+  };
   reader.readAsDataURL(file);
-  e.target.value=''; delete e.target.dataset.frame;
+  e.target.value='';
 }
 function compressImage(img, maxDim){
   let w=img.width, h=img.height;
@@ -1453,43 +1755,79 @@ function compressImage(img, maxDim){
   cv.getContext('2d').drawImage(img,0,0,w,h);
   return cv.toDataURL('image/jpeg',0.82);
 }
-const MAX_AUDIO_BYTES = 10*1024*1024;  // ~10MB
-const MAX_VIDEO_BYTES = 12*1024*1024;  // ~12MB
+const MAX_AUDIO_FALLBACK_BYTES = 8*1024*1024;  // local-only cap when no Storage bucket is configured
+const MAX_VIDEO_FALLBACK_BYTES = 8*1024*1024;
 function handleAudioUpload(e){
   const file=e.target.files[0]; if(!file) return;
-  if(file.size > MAX_AUDIO_BYTES){
-    showToast('That song is too large to save permanently (max ~10MB). Try a shorter clip.');
-    e.target.value=''; return;
-  }
-  const reader = new FileReader();
-  reader.onload = (ev)=>{
-    addElement({type:'audio', x:50,y:50,w:36,h:24, rot:0, src:ev.target.result, name:file.name});
-    closeAllSubpanels();
-    showToast('Song added 🎵');
-  };
-  reader.onerror = ()=> showToast('Could not read that song file.');
-  reader.readAsDataURL(file);
-  e.target.value='';
-}
-function handleVideoUpload(e){
-  const file=e.target.files[0]; if(!file) return;
-  if(file.size > MAX_VIDEO_BYTES){
-    showToast('This video is too large to save permanently (max ~12MB), so it will only play during this session.');
-    const url = URL.createObjectURL(file);
-    addElement({type:'video', x:50,y:50,w:55,h:35, rot:0, src:url, temporary:true});
-    closeAllSubpanels();
+  const bucket = getStorageBucket();
+  if(!bucket){
+    if(file.size > MAX_AUDIO_FALLBACK_BYTES){
+      showToast('Set up a sync server + Storage bucket in Settings to save bigger songs. Without it, songs are limited to ~8MB on this device only.');
+      e.target.value=''; return;
+    }
+    setBtnBusy('audioChooseBtn', true, 'Reading…', 'Choose song');
+    const reader = new FileReader();
+    reader.onload = (ev)=>{
+      addElement({type:'audio', x:50,y:50,w:36,h:24, rot:0, src:ev.target.result, name:file.name});
+      showToast('Song added 🎵 (saved on this device only)');
+      setBtnBusy('audioChooseBtn', false, '', 'Choose song');
+      closeAllSubpanels();
+    };
+    reader.onerror = ()=>{ showToast('Could not read that song file.'); setBtnBusy('audioChooseBtn', false, '', 'Choose song'); };
+    reader.readAsDataURL(file);
     e.target.value='';
     return;
   }
-  const reader = new FileReader();
-  reader.onload = (ev)=>{
-    addElement({type:'video', x:50,y:50,w:55,h:35, rot:0, src:ev.target.result});
-    closeAllSubpanels();
-    showToast('Video added 🎬');
-  };
-  reader.onerror = ()=> showToast('Could not read that video file.');
-  reader.readAsDataURL(file);
-  e.target.value='';
+  setBtnBusy('audioChooseBtn', true, 'Uploading…', 'Choose song');
+  setUploadProgress('media', 0.02, 'Starting upload…');
+  uploadToFirebaseStorage(file, 'audio', file.name, (r)=>setUploadProgress('media', r, Math.round(r*100)+'%'))
+    .then(url=>{
+      addElement({type:'audio', x:50,y:50,w:36,h:24, rot:0, src:url, name:file.name});
+      showToast('Song added 🎵');
+    })
+    .catch(()=>{ showToast('Song upload failed — check your connection and Storage bucket, then try again.'); })
+    .finally(()=>{
+      setUploadProgress('media', null);
+      setBtnBusy('audioChooseBtn', false, '', 'Choose song');
+      closeAllSubpanels();
+      e.target.value='';
+    });
+}
+function handleVideoUpload(e){
+  const file=e.target.files[0]; if(!file) return;
+  const bucket = getStorageBucket();
+  if(!bucket){
+    if(file.size > MAX_VIDEO_FALLBACK_BYTES){
+      showToast('Set up a sync server + Storage bucket in Settings to save bigger videos. Without it, videos are limited to ~8MB on this device only.');
+      e.target.value=''; return;
+    }
+    setBtnBusy('videoChooseBtn', true, 'Reading…', 'Choose video');
+    const reader = new FileReader();
+    reader.onload = (ev)=>{
+      addElement({type:'video', x:50,y:50,w:55,h:35, rot:0, src:ev.target.result});
+      showToast('Video added 🎬 (saved on this device only)');
+      setBtnBusy('videoChooseBtn', false, '', 'Choose video');
+      closeAllSubpanels();
+    };
+    reader.onerror = ()=>{ showToast('Could not read that video file.'); setBtnBusy('videoChooseBtn', false, '', 'Choose video'); };
+    reader.readAsDataURL(file);
+    e.target.value='';
+    return;
+  }
+  setBtnBusy('videoChooseBtn', true, 'Uploading…', 'Choose video');
+  setUploadProgress('media', 0.02, 'Starting upload…');
+  uploadToFirebaseStorage(file, 'videos', file.name, (r)=>setUploadProgress('media', r, Math.round(r*100)+'%'))
+    .then(url=>{
+      addElement({type:'video', x:50,y:50,w:55,h:35, rot:0, src:url});
+      showToast('Video added 🎬');
+    })
+    .catch(()=>{ showToast('Video upload failed — check your connection and Storage bucket, then try again.'); })
+    .finally(()=>{
+      setUploadProgress('media', null);
+      setBtnBusy('videoChooseBtn', false, '', 'Choose video');
+      closeAllSubpanels();
+      e.target.value='';
+    });
 }
 
 /* ============================================================
@@ -1506,20 +1844,25 @@ function setPuzzleGridChoice(n){
 function handlePuzzlePhoto(e){
   const file = e.target.files[0]; if(!file) return;
   const grid = puzzleGridChoice;
+  setUploadProgress('puzzle', 0.3, 'Reading photo…');
   const reader = new FileReader();
   reader.onload = (ev)=>{
     const img = new Image();
     img.onload = ()=>{
+      setUploadProgress('puzzle', 0.7, 'Slicing into pieces…');
       const pieces = sliceImageToPieces(img, grid);
       const total = grid*grid;
       let order = Array.from({length:total}, (_,i)=>i);
       order = shuffleArray(order);
       addElement({type:'puzzle', x:50,y:50,w:74,h:74, rot:0, grid, pieces, order, solved:false});
+      setUploadProgress('puzzle', null);
       closeAllSubpanels();
       showToast('Puzzle page added 🧩');
     };
+    img.onerror = ()=>{ setUploadProgress('puzzle', null); showToast('Could not read that photo file.'); };
     img.src = ev.target.result;
   };
+  reader.onerror = ()=>{ setUploadProgress('puzzle', null); showToast('Could not read that photo file.'); };
   reader.readAsDataURL(file);
   e.target.value='';
 }
@@ -1633,7 +1976,12 @@ function closePuzzleOverlay(){
       el.order = puzzleState.order.slice();
       el.solved = el.order.every((v,i)=>v===i);
     }
-    if(puzzleState.fromBook){ savePages(); renderBook(); }
+    if(puzzleState.fromBook){
+      const p = pages[currentIndex];
+      if(p) p.updatedAt = nowTs();
+      savePages(p ? [p.id] : undefined);
+      renderBook();
+    }
     else { renderEditorCanvas(); }
   }
   document.getElementById('puzzleOverlay').classList.remove('open');
@@ -1796,9 +2144,13 @@ function closeEditor(save){
     }
     editingPage.title = document.getElementById('metaTitle').value.trim() || editingPage.title;
     editingPage.date = document.getElementById('metaDate').value || editingPage.date;
-    if(editingIsNew){ pages.push(editingPage); currentIndex = pages.length-1; }
-    else { pages[currentIndex] = editingPage; }
-    savePages();
+    editingPage.updatedAt = nowTs();
+    if(editingIsNew){
+      editingPage.order = nowTs();
+      pages.push(editingPage);
+      currentIndex = pages.length-1;
+    } else { pages[currentIndex] = editingPage; }
+    savePages([editingPage.id]);
     showScreen('screen-book');
     renderBook();
     showToast('Page saved 🌸');
@@ -1934,10 +2286,13 @@ function renderSearchResults(){
 /* ============================================================
    SETTINGS
 ============================================================ */
-async function resetBook(){
+function resetBook(){
   if(!confirm('Erase every page in this book? This cannot be undone.')) return;
+  const ts = nowTs();
+  pages.forEach(p=>{ addTombstone(p.id, ts); removeSinglePageLocally(p.id); });
   pages=[]; currentIndex=0;
-  await savePages();
+  saveLocalPageIndex([]);
+  scheduleBackgroundSync();
   showToast('Book reset 🌱');
   goCover();
 }
