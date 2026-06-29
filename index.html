@@ -204,6 +204,14 @@ input,textarea{font-family:inherit;}
 .bg-blush{ background: linear-gradient(170deg,#fdeef1,#f6d6dd); }
 .bg-burgundy{ background: linear-gradient(170deg,#5e2236,#46172a); color:#fdf2f0; }
 .bg-kraft{ background: linear-gradient(170deg,#e9dcc0,#d9c79f); }
+.bg-lavender{ background: linear-gradient(170deg,#f1ecf9,#ddd1ee); }
+.bg-mint{ background: linear-gradient(170deg,#eaf6ee,#cfe9d6); }
+.bg-peach{ background: linear-gradient(170deg,#fdebe0,#f8cbb0); }
+.bg-sky{ background: linear-gradient(170deg,#e9f3fb,#bfdcf0); }
+.bg-sage{ background: linear-gradient(170deg,#eef2e6,#c9d6b6); }
+.bg-plum{ background: linear-gradient(170deg,#3f2438,#2a1726); color:#f5e6f0; }
+.bg-navy{ background: linear-gradient(170deg,#1f2a44,#141c30); color:#e8edf7; }
+.bg-sunshine{ background: linear-gradient(170deg,#fdf2c8,#f6dd8a); }
 .page-surface::after{
   content:""; position:absolute; inset:0; pointer-events:none; opacity:.5;
   background-image: radial-gradient(rgba(120,80,70,.05) 1px, transparent 1.4px);
@@ -274,19 +282,52 @@ input,textarea{font-family:inherit;}
   border-radius:50% 50% 6px 6px / 65% 65% 6px 6px;
 }
 .el-photocard-arch img, .el-photocard-arch video{ border-radius:50% 50% 4px 4px / 65% 65% 4px 4px; }
+.el-photocard-cloud{
+  padding:6%; background:#fffaf3;
+  border-radius:60% 40% 50% 50% / 50% 60% 40% 50%;
+}
+.el-photocard-shield{
+  padding:5%; background:#fffaf3;
+  clip-path: polygon(0% 0%,100% 0%,100% 62%,50% 100%,0% 62%);
+}
+.el-photocard-flag{
+  padding:5%; background:#fffaf3;
+  clip-path: polygon(0% 0%,100% 0%,100% 100%,50% 80%,0% 100%);
+}
+.el-photocard-trapezoid{
+  padding:5%; background:#fffaf3;
+  clip-path: polygon(16% 0%,84% 0%,100% 100%,0% 100%);
+}
+.el-photocard-crown{
+  padding:6% 5% 5% 5%; background:#fffaf3;
+  clip-path: polygon(0% 32%,20% 4%,32% 22%,50% 0%,68% 22%,80% 4%,100% 32%,100% 100%,0% 100%);
+}
+.el-photocard-arrow{
+  padding:5%; background:#fffaf3;
+  clip-path: polygon(0% 18%,58% 18%,58% 0%,100% 50%,58% 100%,58% 82%,0% 82%);
+}
 .el-tape{ background: repeating-linear-gradient(45deg, rgba(255,255,255,.0) 0 6px, rgba(255,255,255,.18) 6px 12px); opacity:.85; border-radius:2px; }
 .el-cassette{
-  width:100%; height:100%; border-radius:10cqmin; position:relative;
+  width:100%; height:100%; border-radius:10cqmin; position:relative; cursor:pointer;
   background: linear-gradient(160deg,#f6c3d3,#e487a3);
   box-shadow:0 4px 10px rgba(0,0,0,.25), inset 0 0 0 2px rgba(255,255,255,.4);
   display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6cqh; padding:6% 8%;
 }
 .el-cassette .reels{ display:flex; gap:14cqmin; }
 .el-cassette .reel{ width:20cqmin; height:20cqmin; border-radius:50%; background:#fff8f0; border:3cqmin solid #b9587a; }
+.el-cassette.playing .reel{ animation: cassetteSpin 1.3s linear infinite; }
+@keyframes cassetteSpin{ to{ transform:rotate(360deg); } }
 .el-cassette .label{
   background:#fff8f0; border-radius:4cqmin; padding:3% 8%; font-size:13cqmin; color:#a85a6c;
   max-width:92%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
 }
+.el-cassette .cassette-playstate{
+  position:absolute; top:4%; right:6%; color:#fff; background:rgba(0,0,0,.3);
+  border-radius:50%; width:18cqmin; height:18cqmin; min-width:16px; min-height:16px;
+  display:flex; align-items:center; justify-content:center; font-size:9cqmin;
+}
+.el-cassette.playing .cassette-playstate::before{ content:"⏸"; }
+.el-cassette:not(.playing) .cassette-playstate::before{ content:"▶"; }
 
 .book-nav-arrows{ display:flex; align-items:center; justify-content:center; gap:18px; padding:6px 0 4px; }
 .arrow-btn{
@@ -350,6 +391,13 @@ input,textarea{font-family:inherit;}
 .swatch{ width:34px; height:34px; border-radius:50%; box-shadow:inset 0 0 0 2px rgba(0,0,0,.08); }
 .bg-pick{ width:54px; height:70px; border-radius:6px; box-shadow:0 2px 6px rgba(0,0,0,.2); display:flex; align-items:flex-end; justify-content:center; font-size:9px; color:#fff; padding-bottom:4px; }
 .sticker-grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:6px; }
+.custom-sticker-row{ display:flex; gap:8px; overflow-x:auto; padding-top:8px; }
+.custom-sticker-thumb{ position:relative; width:46px; height:46px; flex:0 0 auto; }
+.custom-sticker-thumb img{ width:100%; height:100%; object-fit:contain; border-radius:6px; background:repeating-conic-gradient(#eee 0% 25%, #fff 0% 50%) 50%/8px 8px; }
+.custom-sticker-del{
+  position:absolute; top:-6px; right:-6px; width:16px; height:16px; border-radius:50%;
+  background:#c9536a; color:#fff; font-size:9px; display:flex; align-items:center; justify-content:center; line-height:1;
+}
 .sticker-grid button{ font-size:24px; padding:6px 0; }
 .font-row{ display:flex; gap:10px; overflow-x:auto; padding-bottom:4px;}
 .font-opt{ padding:8px 14px; border-radius:10px; background:#f3e3e8; font-size:15px; white-space:nowrap; }
@@ -506,6 +554,10 @@ input,textarea{font-family:inherit;}
     </div>
     <button class="cover-open-btn" onclick="openBook()">📖 Open the book</button>
     <div class="cover-bottomnav">
+      <div class="nav-btn" onclick="openBook()">🏠</div>
+      <div class="nav-btn primary" onclick="startAddPage()">＋</div>
+      <div class="nav-btn" onclick="openSearch()">🔍</div>
+      <div class="nav-btn" onclick="goSettings()">⚙️</div>
     </div>
   </div>
 
@@ -513,13 +565,13 @@ input,textarea{font-family:inherit;}
   <div class="screen" id="screen-book">
     <div class="book-topbar">
       <div style="display:flex; gap:4px;">
-        <button class="ico-btn" onclick="goCover()">🏠</button>
-        <button class="ico-btn" onclick="deleteCurrentPage()">🗑️</button>
+        <button class="ico-btn" onclick="goCover()">⌂</button>
+        <button class="ico-btn" onclick="deleteCurrentPage()">🗑</button>
       </div>
       <span class="title-mini">🌸 Our Little Memories</span>
       <div style="display:flex; gap:4px;">
         <button class="ico-btn" onclick="openSearch()">🔍</button>
-        <button class="ico-btn" onclick="startAddPage()">➕</button>
+        <button class="ico-btn" onclick="startAddPage()">＋</button>
       </div>
     </div>
     <div class="book-stage" id="bookStage">
@@ -558,8 +610,8 @@ input,textarea{font-family:inherit;}
       <div class="tool-btn" onclick="addTextEl()"><div class="tool-ico">T</div>Text</div>
       <div class="tool-btn" onclick="toggleSubpanel('panel-sticker')"><div class="tool-ico">✨</div>Sticker</div>
       <div class="tool-btn" onclick="toggleSubpanel('panel-tape')"><div class="tool-ico">🎀</div>Tape</div>
-      <div class="tool-btn" onclick="toggleSubpanel('panel-bg')"><div class="tool-ico">🎨</div>Paper</div>
       <div class="tool-btn" onclick="enterDraw()"><div class="tool-ico">✏️</div>Draw</div>
+      <div class="tool-btn" onclick="toggleSubpanel('panel-bg')"><div class="tool-ico">🎨</div>Paper</div>
       <div class="tool-btn" onclick="toggleSubpanel('panel-frame')"><div class="tool-ico">🖼</div>Frame</div>
       <div class="tool-btn" onclick="toggleSubpanel('panel-pageframe')"><div class="tool-ico">🎗️</div>Border</div>
       <div class="tool-btn" onclick="toggleSubpanel('panel-puzzle')"><div class="tool-ico">🧩</div>Puzzle</div>
@@ -594,12 +646,23 @@ input,textarea{font-family:inherit;}
       <div class="subpanel-header"><h4>Add a song or video</h4><button class="subpanel-close" onclick="closeAllSubpanels()">✕</button></div>
       <button class="editor-save-btn" onclick="closeAllSubpanels(); document.getElementById('audioInput').click();">Choose song</button>
       <input class="hidden-file-input" type="file" id="audioInput" accept="audio/*" onchange="handleAudioUpload(event)">
-      <p style="font-size:11px;color:#9a7d86;margin-top:10px;">Large song/video files play during this session but may not be saved permanently in your browser's storage.</p>
+      <p style="font-size:11px;color:#9a7d86;margin-top:10px;">Songs up to ~10MB and videos up to ~12MB are saved permanently with the page. Bigger files will only play during this visit.</p>
       <button class="editor-save-btn" style="margin-top:6px;" onclick="closeAllSubpanels(); document.getElementById('videoInput').click();">Choose video</button>
       <input class="hidden-file-input" type="file" id="videoInput" accept="video/*" onchange="handleVideoUpload(event)">
     </div>
     <div class="subpanel" id="panel-sticker">
       <div class="subpanel-header"><h4>Stickers</h4><button class="subpanel-close" onclick="closeAllSubpanels()">✕</button></div>
+      <div style="background:#f8eef1;border-radius:12px;padding:10px;margin-bottom:10px;">
+        <p style="font-size:11px;color:#9a7d86;margin:0 0 8px;">Make your own sticker from any photo — no white frame, just the image, and it's saved here for reuse on any page.</p>
+        <div style="display:flex;gap:8px;margin-bottom:8px;">
+          <button class="font-opt" id="stickerSize60" onclick="setCustomStickerSize(60)">Small</button>
+          <button class="font-opt" id="stickerSize120" onclick="setCustomStickerSize(120)" style="background:var(--rose-deep);color:#fff;">Medium</button>
+          <button class="font-opt" id="stickerSize220" onclick="setCustomStickerSize(220)">Large</button>
+        </div>
+        <button class="editor-save-btn" onclick="closeAllSubpanels(); document.getElementById('customStickerInput').click(); setTimeout(()=>document.getElementById('panel-sticker').classList.add('open'),0);">Choose photo for sticker</button>
+        <input class="hidden-file-input" type="file" id="customStickerInput" accept="image/*" onchange="handleCustomStickerUpload(event)">
+        <div class="custom-sticker-row" id="customStickerRow"></div>
+      </div>
       <div class="sticker-grid">
         <button onclick="addSticker('💖')">💖</button><button onclick="addSticker('💕')">💕</button>
         <button onclick="addSticker('💗')">💗</button><button onclick="addSticker('💞')">💞</button>
@@ -646,6 +709,14 @@ input,textarea{font-family:inherit;}
         <div class="bg-pick bg-blush" onclick="setPageBg('blush')">blush</div>
         <div class="bg-pick bg-burgundy" onclick="setPageBg('burgundy')">deep</div>
         <div class="bg-pick bg-kraft" onclick="setPageBg('kraft')">kraft</div>
+        <div class="bg-pick bg-lavender" onclick="setPageBg('lavender')">lavender</div>
+        <div class="bg-pick bg-mint" onclick="setPageBg('mint')">mint</div>
+        <div class="bg-pick bg-peach" onclick="setPageBg('peach')">peach</div>
+        <div class="bg-pick bg-sky" onclick="setPageBg('sky')">sky</div>
+        <div class="bg-pick bg-sage" onclick="setPageBg('sage')">sage</div>
+        <div class="bg-pick bg-plum" onclick="setPageBg('plum')">plum</div>
+        <div class="bg-pick bg-navy" onclick="setPageBg('navy')">navy</div>
+        <div class="bg-pick bg-sunshine" onclick="setPageBg('sunshine')">sunshine</div>
       </div>
     </div>
     <div class="subpanel" id="panel-frame">
@@ -663,6 +734,12 @@ input,textarea{font-family:inherit;}
         <div class="frame-opt" style="border:none;background:#fffaf3;clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);display:flex;align-items:center;justify-content:center;font-size:9px;color:#a85a6c;" onclick="addFrame('diamond')">Diamond</div>
         <div class="frame-opt" style="border:none;background:#fffaf3;clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);display:flex;align-items:center;justify-content:center;font-size:9px;color:#a85a6c;" onclick="addFrame('star')">Star</div>
         <div class="frame-opt" style="border:none;background:#fffaf3;border-radius:50% 50% 6px 6px / 65% 65% 6px 6px;display:flex;align-items:center;justify-content:center;font-size:9px;color:#a85a6c;" onclick="addFrame('arch')">Arch</div>
+        <div class="frame-opt" style="border:none;background:#fffaf3;border-radius:60% 40% 50% 50% / 50% 60% 40% 50%;display:flex;align-items:center;justify-content:center;font-size:9px;color:#a85a6c;" onclick="addFrame('cloud')">Cloud</div>
+        <div class="frame-opt" style="border:none;background:#fffaf3;clip-path:polygon(0% 0%,100% 0%,100% 62%,50% 100%,0% 62%);display:flex;align-items:center;justify-content:center;font-size:9px;color:#a85a6c;" onclick="addFrame('shield')">Shield</div>
+        <div class="frame-opt" style="border:none;background:#fffaf3;clip-path:polygon(0% 0%,100% 0%,100% 100%,50% 80%,0% 100%);display:flex;align-items:center;justify-content:center;font-size:9px;color:#a85a6c;" onclick="addFrame('flag')">Flag</div>
+        <div class="frame-opt" style="border:none;background:#fffaf3;clip-path:polygon(16% 0%,84% 0%,100% 100%,0% 100%);display:flex;align-items:center;justify-content:center;font-size:9px;color:#a85a6c;" onclick="addFrame('trapezoid')">Trapezoid</div>
+        <div class="frame-opt" style="border:none;background:#fffaf3;clip-path:polygon(0% 32%,20% 4%,32% 22%,50% 0%,68% 22%,80% 4%,100% 32%,100% 100%,0% 100%);display:flex;align-items:center;justify-content:center;font-size:9px;color:#a85a6c;" onclick="addFrame('crown')">Crown</div>
+        <div class="frame-opt" style="border:none;background:#fffaf3;clip-path:polygon(0% 18%,58% 18%,58% 0%,100% 50%,58% 100%,58% 82%,0% 82%);display:flex;align-items:center;justify-content:center;font-size:9px;color:#a85a6c;" onclick="addFrame('arrow')">Arrow</div>
       </div>
     </div>
     <div class="subpanel" id="panel-pageframe">
@@ -672,6 +749,14 @@ input,textarea{font-family:inherit;}
         <div class="bg-pick" style="background:#fdf6ec;border:4px double #c9a268;color:#a85a6c;" onclick="setPageFrame('gold')">gold</div>
         <div class="bg-pick" style="background:#fdf6ec;border:3px dashed #c9a268;color:#a85a6c;" onclick="setPageFrame('lace')">🌸 lace</div>
         <div class="bg-pick" style="background:#fdf6ec;border:3px dotted #c97b8c;color:#a85a6c;" onclick="setPageFrame('hearts')">💕 hearts</div>
+        <div class="bg-pick" style="background:#fdf6ec;border:3px dashed #7a9b6e;color:#a85a6c;" onclick="setPageFrame('leaf')">🍃 leaf</div>
+        <div class="bg-pick" style="background:#fdf6ec;border:3px dotted #b07bc9;color:#a85a6c;" onclick="setPageFrame('butterfly')">🦋 wing</div>
+        <div class="bg-pick" style="background:#fdf6ec;border:2px solid #c9a268;color:#a85a6c;" onclick="setPageFrame('star')">✨ star</div>
+        <div class="bg-pick" style="background:#fdf6ec;border:4px double #c97b8c;color:#a85a6c;" onclick="setPageFrame('ribbon')">🎀 ribbon</div>
+        <div class="bg-pick" style="background:#fdf6ec;border:3px dashed #d99a4e;color:#a85a6c;" onclick="setPageFrame('sun')">☀️ sun</div>
+        <div class="bg-pick" style="background:#fdf6ec;border:4px double #8a6450;color:#a85a6c;" onclick="setPageFrame('vintage')">🕊️ vintage</div>
+        <div class="bg-pick" style="background:#fdf6ec;border:3px dotted #c9536a;color:#a85a6c;" onclick="setPageFrame('berry')">🍓 berry</div>
+        <div class="bg-pick" style="background:#fdf6ec;border:3px dashed #8aa6c9;color:#a85a6c;" onclick="setPageFrame('snow')">❄️ snow</div>
       </div>
     </div>
     <div class="subpanel" id="panel-puzzle">
@@ -1005,14 +1090,23 @@ function buildPageCard(page){
 }
 function pageFrameOverlayHTML(kind){
   if(!kind || kind==='none') return '';
-  const corner = kind==='lace' ? '🌸' : kind==='hearts' ? '💕' : '✦';
-  let border;
-  if(kind==='hearts') border = '3px dotted #c97b8c';
-  else if(kind==='lace') border = '3px dashed #c9a268';
-  else border = '5px double #c9a268';
-  return `<div class="page-frame-overlay" style="border:${border};">
-    <span class="pf-corner tl">${corner}</span><span class="pf-corner tr">${corner}</span>
-    <span class="pf-corner bl">${corner}</span><span class="pf-corner br">${corner}</span>
+  const map = {
+    gold:    { corner:'✦', border:'5px double #c9a268' },
+    lace:    { corner:'🌸', border:'3px dashed #c9a268' },
+    hearts:  { corner:'💕', border:'3px dotted #c97b8c' },
+    leaf:    { corner:'🍃', border:'3px dashed #7a9b6e' },
+    butterfly:{ corner:'🦋', border:'3px dotted #b07bc9' },
+    star:    { corner:'✨', border:'2px solid #c9a268' },
+    ribbon:  { corner:'🎀', border:'5px double #c97b8c' },
+    sun:     { corner:'☀️', border:'3px dashed #d99a4e' },
+    vintage: { corner:'🕊️', border:'5px double #8a6450' },
+    berry:   { corner:'🍓', border:'3px dotted #c9536a' },
+    snow:    { corner:'❄️', border:'3px dashed #8aa6c9' }
+  };
+  const cfg = map[kind] || map.gold;
+  return `<div class="page-frame-overlay" style="border:${cfg.border};">
+    <span class="pf-corner tl">${cfg.corner}</span><span class="pf-corner tr">${cfg.corner}</span>
+    <span class="pf-corner bl">${cfg.corner}</span><span class="pf-corner br">${cfg.corner}</span>
   </div>`;
 }
 
@@ -1027,6 +1121,19 @@ function renderElementStatic(el){
   return wrap;
 }
 
+function toggleAudioPlay(id, cardEl){
+  const audio = document.getElementById('audio-'+id);
+  if(!audio) return;
+  document.querySelectorAll('audio').forEach(a=>{ if(a!==audio) a.pause(); });
+  document.querySelectorAll('.el-cassette.playing').forEach(c=>{ if(c!==cardEl) c.classList.remove('playing'); });
+  if(audio.paused){
+    audio.play().then(()=>{ cardEl.classList.add('playing'); })
+      .catch(()=>{ showToast('Could not play this song.'); });
+  } else {
+    audio.pause();
+    cardEl.classList.remove('playing');
+  }
+}
 function mediaFrameHTML(innerTag, el){
   const f = el.frame || 'square';
   if(f==='polaroid') return `<div class="el-polaroid" style="width:100%;height:100%;">${innerTag}</div>`;
@@ -1040,6 +1147,12 @@ function mediaFrameHTML(innerTag, el){
   if(f==='diamond') return `<div class="el-photocard el-photocard-diamond">${innerTag}</div>`;
   if(f==='star') return `<div class="el-photocard el-photocard-star">${innerTag}</div>`;
   if(f==='arch') return `<div class="el-photocard el-photocard-arch">${innerTag}</div>`;
+  if(f==='cloud') return `<div class="el-photocard el-photocard-cloud">${innerTag}</div>`;
+  if(f==='shield') return `<div class="el-photocard el-photocard-shield">${innerTag}</div>`;
+  if(f==='flag') return `<div class="el-photocard el-photocard-flag">${innerTag}</div>`;
+  if(f==='trapezoid') return `<div class="el-photocard el-photocard-trapezoid">${innerTag}</div>`;
+  if(f==='crown') return `<div class="el-photocard el-photocard-crown">${innerTag}</div>`;
+  if(f==='arrow') return `<div class="el-photocard el-photocard-arrow">${innerTag}</div>`;
   return `<div class="el-photocard">${innerTag}</div>`;
 }
 function fillElementContent(wrap, el){
@@ -1060,13 +1173,20 @@ function fillElementContent(wrap, el){
   } else if(el.type==='drawing'){
     wrap.innerHTML = `<img src="${el.src}" style="width:100%;height:100%;object-fit:contain;">`;
   } else if(el.type==='audio'){
-    wrap.innerHTML = `<div class="el-cassette"><div class="reels"><div class="reel"></div><div class="reel"></div></div><div class="label">🎵 ${el.name||'song'}</div></div>`;
+    wrap.innerHTML = `<div class="el-cassette" onclick="toggleAudioPlay('${el.id}', this)">
+      <audio id="audio-${el.id}" src="${el.src}" preload="none" onended="this.closest('.el-cassette').classList.remove('playing')"></audio>
+      <div class="reels"><div class="reel"></div><div class="reel"></div></div>
+      <div class="label">🎵 ${el.name||'song'}</div>
+      <div class="cassette-playstate"></div>
+    </div>`;
   } else if(el.type==='video'){
     wrap.innerHTML = mediaFrameHTML(`<video src="${el.src}" controls></video>`, el);
   } else if(el.type==='puzzle'){
     const cls = el.solved ? 'el-puzzle solved' : 'el-puzzle';
     const label = el.solved ? '✓ Solved — tap to view' : 'Tap to solve';
     wrap.innerHTML = `<div class="${cls}" onclick="openPuzzleFromAny('${el.id}')">🧩<div class="puzzle-label">${label}</div></div>`;
+  } else if(el.type==='imgsticker'){
+    wrap.innerHTML = `<img src="${el.src}" style="width:100%;height:100%;object-fit:contain;display:block;">`;
   }
 }
 
@@ -1238,6 +1358,75 @@ function addTextEl(){
   startTextEdit(newEl.id);
 }
 function addSticker(emoji){ addElement({type:'sticker', x:50,y:50,w:16,h:16, rot:0, emoji}); }
+
+/* ============================================================
+   CUSTOM IMAGE STICKERS — make your own sticker from a photo,
+   saved globally (not per-page) so it's reusable on any page,
+   and added to pages with no white card/frame — just the image.
+============================================================ */
+const CUSTOM_STICKERS_KEY = 'olm-custom-stickers';
+let customStickers = [];
+let customStickerTargetSize = 120;
+function setCustomStickerSize(px){
+  customStickerTargetSize = px;
+  [60,120,220].forEach(s=>{
+    const btn = document.getElementById('stickerSize'+s);
+    if(btn){ btn.style.background = (s===px) ? 'var(--rose-deep)' : ''; btn.style.color = (s===px) ? '#fff' : ''; }
+  });
+}
+function loadCustomStickers(){
+  try{
+    const raw = localStorage.getItem(CUSTOM_STICKERS_KEY);
+    customStickers = raw ? JSON.parse(raw) : [];
+  }catch(e){ customStickers = []; }
+  renderCustomStickerRow();
+}
+function saveCustomStickers(){
+  try{ localStorage.setItem(CUSTOM_STICKERS_KEY, JSON.stringify(customStickers)); }
+  catch(e){ showToast('Could not save sticker — storage may be full.'); }
+}
+function handleCustomStickerUpload(e){
+  const file = e.target.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev)=>{
+    const img = new Image();
+    img.onload = ()=>{
+      const target = customStickerTargetSize;
+      let w = img.width, h = img.height;
+      if(w>h){ h = h*target/w; w = target; } else { w = w*target/h; h = target; }
+      const cv = document.createElement('canvas'); cv.width=Math.round(w); cv.height=Math.round(h);
+      cv.getContext('2d').drawImage(img,0,0,cv.width,cv.height);
+      const dataUrl = cv.toDataURL('image/png');
+      customStickers.push({ id: uid(), src: dataUrl });
+      saveCustomStickers();
+      renderCustomStickerRow();
+      showToast('Sticker saved 🌸');
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+  e.target.value='';
+}
+function renderCustomStickerRow(){
+  const row = document.getElementById('customStickerRow');
+  if(!row) return;
+  row.innerHTML = customStickers.map(s => `
+    <div class="custom-sticker-thumb">
+      <img src="${s.src}" onclick="addCustomStickerToPage('${s.id}')">
+      <div class="custom-sticker-del" onclick="deleteCustomSticker('${s.id}')">✕</div>
+    </div>
+  `).join('');
+}
+function addCustomStickerToPage(id){
+  const s = customStickers.find(x=>x.id===id);
+  if(!s) return;
+  addElement({ type:'imgsticker', x:50, y:50, w:18, h:18, rot:0, src:s.src });
+}
+function deleteCustomSticker(id){
+  customStickers = customStickers.filter(s=>s.id!==id);
+  saveCustomStickers();
+  renderCustomStickerRow();
+}
 function addTape(color){ addElement({type:'tape', x:50,y:20,w:36,h:8, rot:-8, color}); }
 function addFrame(kind){ document.getElementById('photoInput').dataset.frame=kind; toggleSubpanel('panel-photo'); }
 function addPolaroid(){ document.getElementById('photoInput').dataset.frame='polaroid'; toggleSubpanel('panel-photo'); }
@@ -1268,20 +1457,42 @@ function compressImage(img, maxDim){
   cv.getContext('2d').drawImage(img,0,0,w,h);
   return cv.toDataURL('image/jpeg',0.82);
 }
+const MAX_AUDIO_BYTES = 10*1024*1024;  // ~10MB
+const MAX_VIDEO_BYTES = 12*1024*1024;  // ~12MB
 function handleAudioUpload(e){
   const file=e.target.files[0]; if(!file) return;
-  const url = URL.createObjectURL(file);
-  addElement({type:'audio', x:50,y:50,w:36,h:24, rot:0, src:url, name:file.name});
-  closeAllSubpanels();
-  showToast('Song added for this session 🎵');
+  if(file.size > MAX_AUDIO_BYTES){
+    showToast('That song is too large to save permanently (max ~10MB). Try a shorter clip.');
+    e.target.value=''; return;
+  }
+  const reader = new FileReader();
+  reader.onload = (ev)=>{
+    addElement({type:'audio', x:50,y:50,w:36,h:24, rot:0, src:ev.target.result, name:file.name});
+    closeAllSubpanels();
+    showToast('Song added 🎵');
+  };
+  reader.onerror = ()=> showToast('Could not read that song file.');
+  reader.readAsDataURL(file);
   e.target.value='';
 }
 function handleVideoUpload(e){
   const file=e.target.files[0]; if(!file) return;
-  const url = URL.createObjectURL(file);
-  addElement({type:'video', x:50,y:50,w:55,h:35, rot:0, src:url});
-  closeAllSubpanels();
-  showToast('Video added for this session 🎬');
+  if(file.size > MAX_VIDEO_BYTES){
+    showToast('This video is too large to save permanently (max ~12MB), so it will only play during this session.');
+    const url = URL.createObjectURL(file);
+    addElement({type:'video', x:50,y:50,w:55,h:35, rot:0, src:url, temporary:true});
+    closeAllSubpanels();
+    e.target.value='';
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = (ev)=>{
+    addElement({type:'video', x:50,y:50,w:55,h:35, rot:0, src:ev.target.result});
+    closeAllSubpanels();
+    showToast('Video added 🎬');
+  };
+  reader.onerror = ()=> showToast('Could not read that video file.');
+  reader.readAsDataURL(file);
   e.target.value='';
 }
 
@@ -1746,6 +1957,7 @@ document.getElementById('bookStage').addEventListener('dblclick', ()=>{ editCurr
 (async function init(){
   await loadPages();
   renderBook();
+  loadCustomStickers();
 })();
 </script>
 </body>
